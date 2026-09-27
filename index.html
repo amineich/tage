@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TAGE Maths">
+<meta name="theme-color" content="#FFFFFF">
+<title>TAGE MAGE, maths et logique</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800;900&family=Bowlby+One&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#FFFFFF;--card:#FFFFFF;--ink:#111111;--muted:#5C5E55;--hair:#D8DCC8;--grid:#E4E8D5;
+  --sage:#E8ECD6;--sage-2:#D4DBB9;--aub:#2E1B3B;--stroke:#111111;--on-sage:#111111;
+  --green:#2F6B3F;--green-soft:#DDEBD2;--red:#B3362B;--red-soft:#F7E1DC;
+  --display:'Bowlby One','Arial Black',Impact,sans-serif;
+  --serif:'Instrument Serif','Times New Roman',Georgia,serif;
+  --sans:'Archivo',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121212;--card:#1A1A18;--ink:#E8ECD6;--muted:#A5A895;--hair:#34362E;--grid:#2A2C25;
+    --aub:#CDB8E0;--green:#86C795;--green-soft:#1D3322;--red:#F08A7E;--red-soft:#3A1F1B;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121212;--card:#1A1A18;--ink:#E8ECD6;--muted:#A5A895;--hair:#34362E;--grid:#2A2C25;
+  --aub:#CDB8E0;--green:#86C795;--green-soft:#1D3322;--red:#F08A7E;--red-soft:#3A1F1B;color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 var(--sans);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--aub);outline-offset:2px}
+#app{max-width:760px;margin:0 auto;padding:14px 18px calc(104px + env(safe-area-inset-bottom,0px))}
+body.ses #app{max-width:1180px;padding-bottom:40px}
+body.ses #tabs{display:none}
+
+/* typographie de l'affiche */
+.poster{font-family:var(--display);font-weight:400;text-transform:uppercase;color:var(--sage);-webkit-text-stroke:2.2px var(--stroke);paint-order:stroke fill;letter-spacing:.01em;line-height:.98}
+.lineup{text-align:center;margin:18px 0 8px}
+.lineup .kick{font-family:var(--serif);color:var(--aub);font-size:clamp(34px,9vw,64px);line-height:.9;margin:0 0 10px;text-transform:uppercase}
+.lineup .poster{display:block;font-size:clamp(40px,12.5vw,104px)}
+.lineup .poster.s{font-size:clamp(28px,8.6vw,72px)}
+.tag{font:900 13px/1 var(--sans);letter-spacing:-.01em;text-transform:uppercase}
+h1{font-family:var(--serif);font-weight:400;color:var(--aub);font-size:40px;line-height:1.02;margin:10px 0 8px}
+h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.05;margin:36px 0 12px}
+h3{font:800 17px/1.3 var(--sans);margin:22px 0 8px}
+p{margin:0 0 10px}
+.brand{display:flex;align-items:baseline;justify-content:space-between;padding:4px 0 2px}
+.brand .tag:last-child{color:var(--muted);font-weight:700;text-transform:none;font-size:14px}
+.muted{color:var(--muted)}
+.small{font-size:14.5px;line-height:1.45}
+.mono{font-family:var(--sans);font-weight:800;font-variant-numeric:tabular-nums}
+.card{background:var(--card);border:2px solid var(--ink);border-radius:22px;padding:20px}
+.card.flat{background:transparent}
+.stack>*+*{margin-top:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 22px;border-radius:999px;border:2px solid var(--ink);background:var(--card);color:var(--ink);font:800 16.5px/1.2 var(--sans);cursor:pointer;text-align:center}
+.btn.primary{background:var(--sage);color:var(--on-sage);border-color:var(--stroke)}
+.btn.block{display:flex;width:100%}
+.btn.ghost{background:transparent;border-color:var(--hair)}
+.btn.sm{min-height:42px;padding:0 16px;font-size:15px}
+.btn:disabled{opacity:.35;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>.btn{flex:1 1 140px}
+.link{border:0;background:none;color:var(--ink);font-weight:800;padding:6px 0;cursor:pointer;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-height:42px;padding:0 16px;border-radius:999px;border:2px solid var(--ink);background:var(--card);font-weight:800;font-size:15px;cursor:pointer}
+.chip.on{background:var(--sage);color:var(--on-sage);border-color:var(--stroke)}
+hr{border:0;border-top:2px solid var(--ink);margin:22px 0}
+
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:2px solid var(--ink);display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+#tabs button{flex:1;max-width:170px;min-height:48px;border:2px solid transparent;background:none;color:var(--muted);font-weight:800;font-size:15px;border-radius:999px;cursor:pointer}
+#tabs button.on{color:var(--on-sage);background:var(--sage);border-color:var(--stroke)}
+
+/* accueil */
+.hero{padding:22px}
+.hero h1{margin-top:0}
+.plan{list-style:none;padding:0;margin:16px 0 18px;counter-reset:p}
+.plan li{display:flex;gap:12px;align-items:baseline;padding:10px 0;border-top:1.5px solid var(--hair)}
+.plan li:first-child{border-top:0}
+.plan li::before{counter-increment:p;content:counter(p);font:900 15px var(--sans);min-width:18px}
+.plan .dur{margin-left:auto;color:var(--muted);font-size:14.5px;white-space:nowrap}
+.resume{background:var(--sage);color:var(--on-sage);border-color:var(--stroke)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.kpi{border:2px solid var(--ink);border-radius:18px;padding:12px 14px;background:var(--card)}
+.kpi b{display:block;font:900 26px/1.15 var(--sans);font-variant-numeric:tabular-nums}
+.kpi span{font-size:14px;color:var(--muted)}
+.bars{display:flex;align-items:flex-end;gap:8px;height:104px;margin-top:8px}
+.bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.bars i{display:block;width:100%;background:var(--sage);border:2px solid var(--stroke);border-radius:8px 8px 3px 3px;min-height:6px}
+.bars div:first-child i{background:var(--aub);border-color:var(--aub)}
+.bars em{font-style:normal;font-size:12.5px;color:var(--muted);font-weight:700}
+.bars strong{font:800 13px var(--sans)}
+
+.cases{display:inline-flex;gap:3px;vertical-align:middle}
+.cases i{width:14px;height:14px;border:2px solid var(--ink);border-radius:3px;opacity:.35}
+.cases i.f{background:var(--sage);border-color:var(--stroke);opacity:1}
+.clist{list-style:none;margin:0;padding:0}
+.clist li+li{border-top:1.5px solid var(--hair)}
+.crow{display:flex;align-items:center;gap:14px;width:100%;padding:14px 4px;background:none;border:0;text-align:left;cursor:pointer;min-height:62px}
+.crow .t{flex:1}
+.crow .t b{display:block;font-size:16.5px;font-weight:800}
+.crow .t span{font-size:14px;color:var(--muted)}
+.bloc{font:900 13px var(--sans);text-transform:uppercase;color:var(--aub);margin:18px 0 2px}
+.subhead{text-align:center;margin:40px 0 14px}
+.subhead .poster{font-size:clamp(34px,9.5vw,66px)}
+
+/* fiche */
+.fsec{margin-top:28px}
+.fsec h3{margin:0 0 8px}
+.box{background:var(--sage);color:var(--on-sage);border:2px solid var(--stroke);padding:14px 18px;border-radius:18px}
+.box ul,.box ol{margin:0;padding-left:20px}
+.box li+li{margin-top:6px}
+.box.alt{background:var(--card);color:var(--ink);border:2px dashed var(--ink)}
+.pit{margin:0;padding-left:0;list-style:none}
+.pit li{padding:11px 15px;border-radius:14px;background:var(--red-soft);margin-top:8px}
+.wsteps{margin:10px 0 12px;padding-left:26px}
+.wsteps li{padding:4px 0}
+.wsteps li::marker{font-weight:900;color:var(--aub)}
+.blank{border:2px dashed var(--ink);border-radius:16px;padding:10px 12px;margin:6px 0}
+.cmtable{width:100%;border-collapse:collapse;margin-top:4px}
+.cmtable td{padding:7px 4px;vertical-align:top;border-top:1.5px solid var(--stroke)}
+.cmtable tr:first-child td{border-top:0}
+.cmtable td:first-child{font-family:var(--display);width:36px;font-size:18px}
+
+/* questions */
+.stem{font-size:19.5px;line-height:1.5;font-weight:500}
+.series{font:800 25px/1.3 var(--sans);font-variant-numeric:tabular-nums;margin:12px 0 4px;letter-spacing:.02em;overflow-x:auto}
+.infos{margin-top:12px}
+.infos p{padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--card);margin-bottom:8px}
+.gridq{display:inline-grid;grid-template-columns:repeat(3,60px);gap:6px;margin:12px 0 4px}
+.gridq span{height:56px;display:grid;place-items:center;border:2px solid var(--ink);border-radius:12px;background:var(--card);font:900 21px var(--sans)}
+.gridq span.q{background:var(--sage);color:var(--on-sage);border-style:dashed}
+.opts{display:grid;gap:10px;margin-top:18px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;min-height:58px;padding:10px 14px;text-align:left;border:2px solid var(--hair);border-radius:18px;background:var(--card);font-size:17px;line-height:1.35;cursor:pointer}
+.opt:disabled{cursor:default}
+.bub{flex:none;width:38px;height:38px;border-radius:50%;border:2px solid var(--stroke);background:var(--sage);color:var(--on-sage);display:grid;place-items:center;font-family:var(--display);font-size:15px}
+.opt.sel{border-color:var(--ink)}
+.opt.sel .bub{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.opt.good{border-color:var(--green);background:var(--green-soft)}
+.opt.good .bub{background:var(--green);border-color:var(--green);color:#fff}
+.opt.bad{border-color:var(--red);background:var(--red-soft)}
+.opt.bad .bub{background:var(--red);border-color:var(--red);color:#fff}
+.opt.dim{opacity:.5}
+.conf{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.conf .btn{padding:0 8px}
+.ask{margin-top:18px}
+.ask p{margin-bottom:6px;font-weight:800}
+.fb{margin-top:18px;padding:16px 18px;border-radius:20px;background:var(--card);border:2px solid var(--ink)}
+.verdict{font-family:var(--display);text-transform:uppercase;font-size:24px;margin-bottom:6px}
+.verdict.ok{color:var(--green)}
+.verdict.ko{color:var(--red)}
+.note{font-size:15px;padding:10px 14px;border-radius:14px;background:var(--sage);color:var(--on-sage);border:2px solid var(--stroke);margin:10px 0}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.grades .btn{flex-direction:column;gap:2px;min-height:66px;padding:6px 4px;font-size:15px;border-radius:18px}
+.grades small{font-weight:500;color:var(--muted);font-size:13px}
+.grades .g1{border-color:var(--red);color:var(--red)}
+.flash{text-align:center;padding:30px 20px}
+.flash .front{font:800 22px/1.35 var(--sans)}
+.flash .back{font-size:19px;line-height:1.5;margin-top:18px;padding-top:18px;border-top:2px dashed var(--ink)}
+.bigscore{text-align:center;margin:6px 0 12px}
+.bigscore .poster{font-size:clamp(64px,20vw,140px)}
+
+/* session */
+.topbar{position:sticky;top:0;z-index:15;display:flex;align-items:center;gap:14px;padding:10px 0 12px;background:var(--bg)}
+.icon{width:46px;height:46px;border-radius:50%;border:2px solid var(--ink);background:var(--card);font-size:18px;font-weight:800;cursor:pointer;flex:none}
+.tb-mid{flex:1;min-width:0}
+.tb-label{font:900 14px var(--sans);text-transform:uppercase;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prog{height:12px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--card)}
+.prog i{display:block;height:100%;background:var(--sage)}
+.clock{font:900 19px var(--sans);font-variant-numeric:tabular-nums;min-width:64px;text-align:right}
+.clock.warn{color:var(--red)}
+.split{display:grid;gap:18px}
+.scr-toggle{margin-top:14px}
+.scr-wrap{display:none;margin-top:14px}
+.scr-wrap.open{display:block}
+.scr-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.scr-wrap canvas{display:block;width:100%;height:320px;border:2px solid var(--ink);border-radius:20px;touch-action:none;background-color:var(--card);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:20px 20px;background-position:-1px -1px;cursor:crosshair}
+@media (min-width:900px){
+  .split{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start;gap:28px}
+  .scr-toggle{display:none}
+  .scr-wrap{display:block;margin-top:0;position:sticky;top:80px}
+  .scr-wrap canvas{height:min(72vh,660px)}
+}
+.alertbar{position:fixed;left:50%;top:calc(12px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:40;background:var(--sage);color:var(--on-sage);border:2px solid var(--stroke);padding:12px 22px;border-radius:999px;font-weight:800;white-space:nowrap}
+.warm{text-align:center;padding-top:10px}
+.warm .wq{font:900 44px/1.2 var(--sans);font-variant-numeric:tabular-nums;margin:26px 0 18px;min-height:52px}
+.ansin{width:100%;max-width:340px;min-height:64px;text-align:center;font:900 30px var(--sans);border:2px solid var(--ink);border-radius:999px;background:var(--card);color:var(--ink);padding:0 16px}
+.ansin:focus{background:var(--sage);color:var(--on-sage);outline:none}
+.wfb{min-height:30px;margin-top:12px;font-weight:800;font-size:18px}
+.wfb.ok{color:var(--green)}.wfb.ko{color:var(--red)}
+.sheet{display:grid;gap:6px}
+.srow{display:flex;align-items:center;gap:8px}
+.srow .n{width:30px;font:900 15px var(--sans);color:var(--muted);text-align:right}
+.srow .bubs{display:flex;gap:6px}
+.sb{width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);background:var(--card);font-family:var(--display);font-size:14px;cursor:pointer;display:grid;place-items:center}
+.sb.on{background:var(--sage);color:var(--on-sage);border-color:var(--stroke)}
+.sb.key{background:var(--green);border-color:var(--green);color:#fff}
+.srow .mine{font:900 14px var(--sans);color:var(--muted);min-width:40px}
+.erow{padding:14px 0;border-top:1.5px solid var(--hair)}
+select{font:inherit;font-size:16px;min-height:48px;border-radius:14px;border:2px solid var(--ink);background:var(--card);color:var(--ink);padding:0 12px;max-width:100%}
+textarea{width:100%;min-height:110px;font:14px/1.4 ui-monospace,Menlo,monospace;border-radius:14px;border:2px solid var(--ink);background:var(--card);color:var(--ink);padding:10px}
+#ovl{position:fixed;inset:0;z-index:30;background:var(--bg);overflow:auto;padding:calc(12px + env(safe-area-inset-top,0px)) 18px calc(40px + env(safe-area-inset-bottom,0px))}
+#ovl .inner{max-width:760px;margin:0 auto}
+#ovl[hidden]{display:none}
+.meter{height:14px;border:2px solid var(--ink);border-radius:999px;overflow:hidden;margin-top:8px;background:var(--card)}
+.meter i{display:block;height:100%;background:var(--sage)}
+.srow2{padding:14px 0;border-top:1.5px solid var(--hair)}
+.srow2:first-child{border-top:0}
+.srow2 .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.srow2 .top b{font-weight:800}
+.review-item{padding:14px 0;border-top:1.5px solid var(--hair)}
+details summary{cursor:pointer;font-weight:800;padding:6px 0;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px}
+.ok-t{color:var(--green);font-weight:800}.ko-t{color:var(--red);font-weight:800}
+.syncline{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700}
+.syncline i{width:12px;height:12px;border-radius:50%;border:2px solid var(--stroke);background:var(--sage);flex:none}
+.syncline.off i{background:transparent;border-color:var(--muted)}
+@media (max-width:420px){
+  h1{font-size:34px}
+  .grades .btn{font-size:14px}
+  .kpi b{font-size:22px}
+  .sb{width:39px;height:39px}
+  .poster{-webkit-text-stroke-width:1.8px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .opt,.btn,.chip{transition:background-color .15s,border-color .15s}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="tabs" aria-label="Navigation"></nav>
+<div id="ovl" hidden></div>
+<script>
+'use strict';
+/* ============ Outils ============ */
+const $=s=>document.querySelector(s);
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+function fr(n,d=2){const p=Math.pow(10,d);const r=Math.round(n*p)/p;const s=Math.abs(r).toString();if(s.includes('e'))return String(r);let [i,dec]=s.split('.');i=i.replace(/\B(?=(\d{3})+(?!\d))/g,'\u202f');return (r<0?'−':'')+i+(dec?','+dec:'')}
+const eur=n=>fr(n)+' €';
+const pctS=x=>(x>0?'+':x<0?'−':'')+fr(Math.abs(x))+' %';
+function fmtH(h){const m=Math.round(h*60);const H=Math.floor(m/60),M=m%60;if(!H)return M+' min';return H+' h'+(M?' '+String(M).padStart(2,'0'):'')}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LET=n=>String.fromCharCode(65+((((n-1)%26)+26)%26));
+const L5='ABCDE';
+function numOpts(ans,cands,fmt=fr){
+  const A=fmt(ans);const seen=new Set([A]);const d=[];
+  const okv=c=>typeof c==='number'&&isFinite(c)&&(c>0||ans<=0||fmt===pctS);
+  for(const c of cands){if(!okv(c))continue;const s=fmt(c);if(!seen.has(s)){seen.add(s);d.push(s)}if(d.length===4)break}
+  const step=Math.max(1,Math.round(Math.abs(ans)*0.1));let k=1;
+  while(d.length<4&&k<80){const c=ans+(k%2?1:-1)*Math.ceil(k/2)*step;if(okv(c)){const s=fmt(c);if(!seen.has(s)){seen.add(s);d.push(s)}}k++}
+  const opts=shuffle([A,...d]);return {opts,a:opts.indexOf(A)};
+}
+function strOpts(ans,cands){const seen=new Set([ans]);const d=[];for(const c of cands){if(c!=null&&!seen.has(c)){seen.add(c);d.push(c)}if(d.length===4)break}const opts=shuffle([ans,...d]);return {opts,a:opts.indexOf(ans)}}
+
+const SUBS={calc:'Calcul',cm:'Conditions minimales',logi:'Logique'};
+const SUB_ORDER=['calc','cm','logi'];
+const CM_OPTS=['L’information (1) suffit, la (2) non','L’information (2) suffit, la (1) non','Les deux ensemble suffisent, aucune seule','Chacune suffit seule','Même ensemble, elles ne suffisent pas'];
+const LEVELS=['Nouveau','Découvert','En apprentissage','Consolidé','Maîtrisé'];
+
+/* ============ Le cours ============ */
+const CONCEPTS=[
+{id:'calc-mental',sub:'calc',bloc:'Outils de calcul',title:'Calcul mental et astuces',book:'fiches 22, 23 et 28 (p. 100 à 113)',skill:'mult',
+intuition:`Au TAGE, la calculatrice est interdite et chaque question doit prendre environ 80 secondes. Le calcul mental ne consiste pas à calculer plus vite, mais à <b>transformer</b> une opération pénible en opérations faciles : multiplier par 10 ou par 100, diviser par 2 ou par 4, ajouter ou retrancher un petit nombre.`,
+regle:`<ul><li><b>× 5</b> : × 10, puis ÷ 2</li><li><b>× 25</b> : × 100, puis ÷ 4</li><li><b>× 9</b> : × 10, moins le nombre. <b>× 99</b> : × 100, moins le nombre</li><li><b>× 11</b> d’un nombre ab : on écrit a, puis a + b, puis b (retenue si a + b ≥ 10)</li><li><b>Carré d’un nombre qui finit par 5</b> : n × (n + 1), puis on écrit 25</li></ul>`,
+ex:{enonce:'Calculer 48 × 25 de tête.',steps:['25, c’est 100 ÷ 4 : on remplace × 25 par × 100 puis ÷ 4.','48 × 100 = 4 800.','4 800 ÷ 4 = 1 200. Réponse : 1 200.']},
+trou:{enonce:'Calculer 65².',steps:['Le nombre finit par 5 : on prend n = 6.','n × (n + 1) = 6 × 7 = 42.','On accole 25 : 65² = 4 225.'],blank:1,choices:['6 × 7 = 42','6 × 6 = 36','6 × 5 = 30'],ok:0},
+pieges:['× 11 avec retenue : 78 × 11 donne 7, puis 15, puis 8. Le 1 de 15 s’ajoute au 7 : 858, et non 7 158.','Poser toute l’opération alors que les 5 réponses ont des derniers chiffres différents : le dernier chiffre suffit à trancher.'],
+reflexe:'Avant de calculer, regarde les réponses. L’ordre de grandeur et le dernier chiffre éliminent souvent 3 ou 4 propositions en quelques secondes.',
+cartes:[['Multiplier par 25 de tête ?','× 100, puis ÷ 4. Exemple : 36 × 25 = 3 600 ÷ 4 = 900.'],['Multiplier par 11 un nombre à deux chiffres ab ?','On écrit a, puis a + b, puis b (avec retenue). Exemple : 53 × 11 = 583.'],['Carré d’un nombre qui finit par 5 ?','n × (n + 1), puis on accole 25. Exemple : 35² : 3 × 4 = 12, donc 1 225.'],['Multiplier par 99 ?','× 100, puis on retire le nombre. Exemple : 47 × 99 = 4 700 − 47 = 4 653.']]},
+
+{id:'calc-fractions',sub:'calc',bloc:'Outils de calcul',title:'Fractions et décimaux',book:'fiches 25, 26 et 44 (p. 106 à 109 et p. 144)',skill:'frac',
+intuition:`Une fraction est une division en attente. Connaître par cœur les équivalences entre fractions et décimaux permet de choisir la forme la plus simple : 0,375 × 64 est pénible, 3/8 × 64 se fait de tête. Et diviser par un nombre plus petit que 1 <b>agrandit</b> le résultat.`,
+regle:`<ul><li>1/2 = 0,5 ; 1/4 = 0,25 ; 3/4 = 0,75 ; 1/5 = 0,2</li><li>1/8 = 0,125, donc 3/8 = 0,375 ; 5/8 = 0,625 ; 7/8 = 0,875</li><li>1/3 ≈ 0,333 ; 2/3 ≈ 0,667 ; 1/6 ≈ 0,167 ; 1/9 ≈ 0,111</li><li>Diviser par une fraction, c’est multiplier par son inverse : ÷ 0,25 = × 4 ; ÷ 0,125 = × 8 ; ÷ 0,75 = × 4/3</li><li>Pour additionner, on met d’abord au même dénominateur : 1/2 + 1/3 = 3/6 + 2/6 = 5/6</li></ul>`,
+ex:{enonce:'Calculer 36 ÷ 0,75.',steps:['0,75 = 3/4.','Diviser par 3/4, c’est multiplier par 4/3.','36 ÷ 3 = 12, puis 12 × 4 = 48. Réponse : 48.']},
+trou:{enonce:'Calculer 0,375 × 64.',steps:['0,375 = 3/8.','64 ÷ 8 = 8.','8 × 3 = 24. Réponse : 24.'],blank:0,choices:['0,375 = 3/8','0,375 = 3/5','0,375 = 1/3'],ok:0},
+pieges:['1/2 + 1/3 ne fait pas 2/5 : on n’additionne jamais les dénominateurs.','Diviser par 0,5 double le nombre (il ne le divise pas par deux).'],
+reflexe:'Dès que tu vois 0,125, 0,25, 0,2, 0,75 ou 0,375, passe en fraction : le calcul se simplifie presque toujours.',
+cartes:[['3/8 en décimal ?','0,375 (1/8 = 0,125, et 3 × 0,125 = 0,375).'],['1/6 en décimal ?','Environ 0,167 (la moitié de 1/3 ≈ 0,333).'],['Diviser par 0,25 revient à… ?','Multiplier par 4.'],['a/b ÷ c/d = ?','a/b × d/c : on multiplie par l’inverse.']]},
+
+{id:'calc-pct',sub:'calc',bloc:'Proportions',title:'Pourcentages et évolutions',book:'fiches 34 et 35 (p. 124 à 127)',skill:'pct',pre:['calc-fractions'],
+intuition:`Un pourcentage d’évolution est un <b>coefficient multiplicateur</b>. Augmenter de 20 %, c’est multiplier par 1,2 ; baisser de 20 %, c’est multiplier par 0,8. Tout découle de là : les évolutions successives se multiplient (elles ne s’additionnent pas), et pour revenir en arrière, on divise.`,
+regle:`<ul><li>Hausse de t % : × (1 + t/100). Baisse de t % : × (1 − t/100)</li><li>Évolutions successives : on multiplie les coefficients</li><li>Valeur avant une hausse de t % : on divise par (1 + t/100)</li><li>Taux d’évolution de A vers B : (B − A) ÷ A × 100, toujours par rapport à la valeur de départ</li><li>+a % puis −a % : baisse de a²/100 % (±10 % donne −1 %)</li></ul>`,
+ex:{enonce:'Un prix augmente de 25 %, puis baisse de 20 %. Quelle est l’évolution globale ?',steps:['Coefficients : +25 % donne × 1,25 ; −20 % donne × 0,8.','On multiplie : 1,25 × 0,8 = 1.','Coefficient 1 : le prix n’a pas bougé. Évolution : 0 %.']},
+trou:{enonce:'Après une hausse de 20 %, un article coûte 96 €. Quel était son prix ?',steps:['La hausse correspond au coefficient 1,2.','Prix initial = 96 ÷ 1,2.','Prix initial = 80 €.'],blank:1,choices:['Prix initial = 96 ÷ 1,2.','Prix initial = 96 × 0,8.','Prix initial = 96 − 20.'],ok:0},
+pieges:['Baisser de 20 % un prix qui a augmenté de 20 % ne ramène pas au départ : 1,2 × 0,8 = 0,96, soit −4 %.','Pour retrouver un prix initial, on divise par le coefficient. Retirer 20 % au prix final donne un résultat faux.','Un taux d’évolution se calcule par rapport à la valeur de départ, jamais d’arrivée.'],
+reflexe:'10 % : on décale la virgule. 5 % : la moitié de 10 %. 15 % : 10 % + 5 %. 25 % : un quart.',
+cartes:[['Hausse de t % en coefficient ?','× (1 + t/100). Exemple : +15 % donne × 1,15.'],['+a % puis −a % ?','Une baisse de a²/100 %. Exemple : +20 % puis −20 % donne −4 %.'],['Retrouver la valeur avant une hausse de t % ?','Diviser par (1 + t/100).'],['Taux d’évolution de A à B ?','(B − A) ÷ A × 100.']]},
+
+{id:'calc-prop',sub:'calc',bloc:'Proportions',title:'Proportionnalité',book:'fiches 36 et 37 (p. 128 à 131)',
+intuition:`Deux grandeurs sont proportionnelles quand doubler l’une double l’autre : le prix et le nombre d’articles, par exemple. Elles sont <b>inversement</b> proportionnelles quand doubler l’une divise l’autre par deux : plus d’ouvriers, moins de jours. La première question à se poser est toujours : « si je double, que se passe-t-il ? »`,
+regle:`<ul><li>Direct : passer par l’unité (le prix d’un article), ou produit en croix : a/b = c/x donne x = b × c ÷ a</li><li>Inverse : le produit reste constant (ouvriers × jours = quantité de travail)</li><li>Multiple : la production est proportionnelle à chaque facteur (machines × heures). On ajuste les facteurs un par un</li></ul>`,
+ex:{enonce:'6 stylos coûtent 9 €. Combien coûtent 10 stylos ?',steps:['Prix d’un stylo : 9 ÷ 6 = 1,50 €.','10 stylos : 10 × 1,50 = 15 €.']},
+trou:{enonce:'4 ouvriers font un chantier en 15 jours. Combien de jours faut-il à 6 ouvriers ?',steps:['Quantité de travail : 4 × 15 = 60 jours-ouvrier.','Avec 6 ouvriers : 60 ÷ 6 = 10 jours.'],blank:0,choices:['Quantité de travail : 4 × 15 = 60 jours-ouvrier.','Chaque ouvrier : 15 ÷ 4 = 3,75 jours.','Règle de trois : 15 × 6 ÷ 4 = 22,5 jours.'],ok:0},
+pieges:['Appliquer une règle de trois directe à une situation inverse : plus d’ouvriers ne veut pas dire plus de jours.','En proportionnalité multiple, oublier l’un des facteurs (le nombre d’heures, par exemple).'],
+reflexe:'Vérifie le sens : si une réponse va dans la mauvaise direction (plus d’ouvriers et plus de jours), elle est fausse sans calcul.',
+cartes:[['Produit en croix : a/b = c/x. Que vaut x ?','x = b × c ÷ a.'],['Grandeurs inversement proportionnelles ?','Leur produit reste constant (exemple : ouvriers × jours).'],['Proportionnalité multiple (machines, heures, pièces) ?','Les pièces sont proportionnelles à machines × heures : on multiplie par le rapport de chaque facteur.']]},
+
+{id:'calc-moy',sub:'calc',bloc:'Proportions',title:'Moyennes',book:'fiches 38 et 39 (p. 132 à 135)',
+intuition:`Une moyenne, c’est un total réparti équitablement. Presque tous les problèmes se résolvent en repassant par le <b>total</b> : total = moyenne × effectif. Et quand deux groupes n’ont pas la même taille, la moyenne globale penche vers le groupe le plus nombreux.`,
+regle:`<ul><li>Total = moyenne × effectif</li><li>Moyenne pondérée : (somme des valeurs × coefficients) ÷ (somme des coefficients)</li><li>Ajouter ou retirer un élément : on recalcule le total, puis on divise par le nouvel effectif</li></ul>`,
+ex:{enonce:'La moyenne de 4 notes est 12. Quelle 5e note faut-il pour avoir 13 de moyenne ?',steps:['Total actuel : 4 × 12 = 48.','Total visé : 5 × 13 = 65.','Note nécessaire : 65 − 48 = 17.']},
+trou:{enonce:'Groupe A : 10 personnes, moyenne 20. Groupe B : 30 personnes, moyenne 12. Quelle est la moyenne de l’ensemble ?',steps:['Total : 10 × 20 + 30 × 12 = 200 + 360 = 560.','Effectif : 40. Moyenne : 560 ÷ 40 = 14.'],blank:0,choices:['Total : 10 × 20 + 30 × 12 = 200 + 360 = 560.','Moyenne des moyennes : (20 + 12) ÷ 2 = 16.','Produit : 20 × 12 = 240.'],ok:0},
+pieges:['Faire la moyenne des moyennes quand les effectifs sont différents.','Confondre la moyenne des vitesses et la vitesse moyenne (voir le concept Vitesse).'],
+reflexe:'La moyenne pondérée est toujours plus proche du groupe le plus nombreux. Dans l’exemple, elle est forcément plus près de 12 que de 20 : tout ce qui dépasse 16 est éliminé d’office.',
+cartes:[['Total d’une série de moyenne m et d’effectif n ?','m × n.'],['Moyenne de deux groupes de tailles différentes ?','Total des deux groupes ÷ effectif total (moyenne pondérée).'],['Note à obtenir pour atteindre une moyenne visée ?','Moyenne visée × nouvel effectif, moins le total actuel.']]},
+
+{id:'calc-vitesse',sub:'calc',bloc:'Problèmes types',title:'Vitesse, distance, temps',book:'fiches 45, 47, 48 et 49 (p. 146 à 155)',pre:['calc-prop'],
+intuition:`Tout tient en une formule : distance = vitesse × temps. Les difficultés viennent presque toujours des <b>unités de temps</b> (1 h 15 vaut 1,25 h, pas 1,15 h) et de deux situations types : deux mobiles qui se rapprochent (on additionne leurs vitesses) ou qui se poursuivent (on les soustrait).`,
+regle:`<ul><li>d = v × t ; v = d ÷ t ; t = d ÷ v</li><li>Minutes en heures : ÷ 60 (15 min = 0,25 h ; 45 min = 0,75 h ; 12 min = 0,2 h)</li><li>Croisement (face à face) : temps = distance ÷ (v₁ + v₂)</li><li>Rattrapage (même sens) : temps = écart ÷ (v₁ − v₂)</li><li>Vitesse moyenne d’un aller-retour : 2 × v₁ × v₂ ÷ (v₁ + v₂), et non la moyenne des deux vitesses</li></ul>`,
+ex:{enonce:'Aller à 60 km/h, retour sur le même trajet à 40 km/h. Quelle est la vitesse moyenne ?',steps:['On prend un trajet de 120 km (un multiple commode de 60 et de 40).','Aller : 120 ÷ 60 = 2 h. Retour : 120 ÷ 40 = 3 h.','Total : 240 km en 5 h, soit 48 km/h (et non 50).']},
+trou:{enonce:'Deux voitures distantes de 300 km roulent l’une vers l’autre, à 70 et 80 km/h. Quand se croisent-elles ?',steps:['Elles se rapprochent de 70 + 80 = 150 km chaque heure.','Temps : 300 ÷ 150 = 2 h.'],blank:0,choices:['Elles se rapprochent de 70 + 80 = 150 km chaque heure.','Elles se rapprochent de 80 − 70 = 10 km chaque heure.','Elles se rapprochent de (70 + 80) ÷ 2 = 75 km chaque heure.'],ok:0},
+pieges:['1 h 15 = 1,25 h, pas 1,15 h. Même piège avec 1 h 30 = 1,5 h.','La vitesse moyenne d’un aller-retour n’est pas la moyenne des deux vitesses : elle est plus proche de la vitesse la plus lente.'],
+reflexe:'60 km/h, c’est 1 km par minute. Ramène les vitesses à cette référence pour calculer de tête.',
+cartes:[['Vitesse moyenne d’un aller-retour à v₁ puis v₂ ?','2 × v₁ × v₂ ÷ (v₁ + v₂).'],['Deux mobiles face à face : temps avant le croisement ?','Distance ÷ (v₁ + v₂).'],['Rattrapage : temps ?','Écart ÷ (v₁ − v₂).'],['45 min en heures ?','0,75 h.'],['Passer des km/h aux m/s ?','Diviser par 3,6.']]},
+
+{id:'calc-travail',sub:'calc',bloc:'Problèmes types',title:'Travail en commun et débits',book:'fiches 40 et 46 (p. 136 et p. 148)',pre:['calc-fractions'],
+intuition:`On n’additionne jamais des durées : on additionne des <b>vitesses de travail</b>. Si A fait le travail en 3 h, il en fait 1/3 par heure ; si B le fait en 6 h, il en fait 1/6 par heure. Ensemble : 1/3 + 1/6 = 1/2 par heure, donc 2 h.`,
+regle:`<ul><li>1/T = 1/t₁ + 1/t₂</li><li>Pour deux : T = t₁ × t₂ ÷ (t₁ + t₂)</li><li>Remplissage et fuite : 1/T = 1/t(remplissage) − 1/t(fuite)</li><li>Le temps à deux est toujours plus court que celui du plus rapide seul</li></ul>`,
+ex:{enonce:'Un robinet remplit une cuve en 3 h, un autre en 6 h. En combien de temps la remplissent-ils ensemble ?',steps:['Par heure : 1/3 + 1/6 = 2/6 + 1/6 = 3/6 = 1/2 de cuve.','La moitié par heure : 2 h pour la cuve entière.','Vérification : 3 × 6 ÷ (3 + 6) = 18 ÷ 9 = 2 h.']},
+trou:{enonce:'Ensemble, A et B font un travail en 4 h. Seul, A met 12 h. Combien de temps met B seul ?',steps:['Part de B par heure : 1/4 − 1/12.','1/4 − 1/12 = 3/12 − 1/12 = 2/12 = 1/6.','B seul : 6 h.'],blank:0,choices:['Part de B par heure : 1/4 − 1/12.','Durée de B : 12 − 4 = 8 h.','Part de B par heure : 1/4 + 1/12.'],ok:0},
+pieges:['Additionner les durées (3 h + 6 h = 9 h) : absurde, à deux on va plus vite.','Faire la moyenne des durées.'],
+reflexe:'Élimine toute réponse supérieure au temps du plus rapide seul : elle ne peut pas être juste.',
+cartes:[['Deux personnes en t₁ et t₂ : temps ensemble ?','t₁ × t₂ ÷ (t₁ + t₂).'],['Remplissage en t₁, fuite en t₂ ?','1/T = 1/t₁ − 1/t₂.'],['Le temps à deux peut-il dépasser celui du plus rapide ?','Non, il est toujours plus court.']]},
+
+{id:'calc-eq',sub:'calc',bloc:'Algèbre',title:'Équations et systèmes',book:'fiches 42, 43 et 66 (p. 140 à 143 et p. 188)',
+intuition:`Un problème rédigé se traduit en équations : une inconnue par quantité cherchée, une équation par information. Avec deux inconnues, il faut deux équations. Mais au TAGE, il existe souvent plus rapide : <b>tester les réponses proposées</b> (le backsolving).`,
+regle:`<ul><li>Traduire mot à mot : « A a 5 ans de plus que B » donne A = B + 5</li><li>Système : additionner ou soustraire les équations pour faire disparaître une inconnue</li><li>Backsolving : tester la réponse du milieu (C). Si elle est trop grande, descendre ; sinon, monter</li></ul>`,
+ex:{enonce:'Un père a 3 fois l’âge de sa fille. Dans 12 ans, il aura le double de son âge. Quel âge a le père ?',steps:['Fille : f. Père : 3f.','Dans 12 ans : 3f + 12 = 2 × (f + 12).','3f + 12 = 2f + 24, donc f = 12. Le père a 36 ans.']},
+trou:{enonce:'2x + y = 11 et x − y = 1. Que vaut x ?',steps:['On additionne les deux équations : les y disparaissent.','3x = 12.','x = 4 (et y = 3).'],blank:0,choices:['On additionne les deux équations : les y disparaissent.','On multiplie les deux équations entre elles.','On soustrait la deuxième de la première : les x disparaissent.'],ok:0},
+pieges:['Traduire à l’envers : « A a 3 ans de moins que B » donne A = B − 3.','Donner la valeur de x quand l’énoncé demande y (ou l’âge de la fille au lieu de celui du père).'],
+reflexe:'Si l’énoncé est long mais que les réponses sont des nombres simples, teste-les : c’est souvent deux fois plus rapide que de poser l’équation.',
+cartes:[['Le backsolving ?','Tester les réponses proposées, en commençant par celle du milieu.'],['« A a 3 ans de moins que le double de B » ?','A = 2B − 3.'],['Système à deux inconnues : combien d’équations faut-il ?','Deux équations indépendantes (qui ne disent pas la même chose).']]},
+
+{id:'cm-grille',sub:'cm',bloc:'Méthode',title:'La grille A à E',book:'fiches 98 à 107 (p. 328 à 347)',
+intuition:`En Conditions minimales, on ne cherche pas la réponse : on cherche seulement à savoir si les informations <b>permettent</b> de la trouver. On teste l’information (1) seule, puis la (2) seule, puis les deux ensemble. Inutile de finir les calculs : dès qu’on sait qu’on peut, on s’arrête.`,
+regle:`<table class="cmtable"><tr><td>A</td><td>(1) suffit seule, (2) ne suffit pas</td></tr><tr><td>B</td><td>(2) suffit seule, (1) ne suffit pas</td></tr><tr><td>C</td><td>Aucune ne suffit seule, les deux ensemble suffisent</td></tr><tr><td>D</td><td>Chacune suffit seule</td></tr><tr><td>E</td><td>Même ensemble, elles ne suffisent pas</td></tr></table><p style="margin:12px 0 0">L’arbre de décision : si (1) suffit, on teste (2) : oui donne D, non donne A. Si (1) ne suffit pas et que (2) suffit : B. Si aucune ne suffit seule : ensemble, oui donne C, non donne E.</p>`,
+ex:{enonce:'Que vaut x ? (1) 2x + y = 10. (2) x − y = 2.',steps:['(1) seule : une équation, deux inconnues. Infinité de solutions : ne suffit pas.','(2) seule : même problème, ne suffit pas.','Ensemble : deux équations indépendantes pour deux inconnues. On peut trouver x (x = 4). Réponse C.']},
+trou:{enonce:'Tous les stylos ont le même prix. Combien coûte un stylo ? (1) 4 stylos coûtent 6 €. (2) 10 stylos coûtent 15 €.',steps:['(1) seule : 6 ÷ 4 = 1,50 €. Suffit.','(2) seule : 15 ÷ 10 = 1,50 €. Suffit.','Chacune suffit seule : réponse D.'],blank:2,choices:['Chacune suffit seule : réponse D.','Il faut les deux : réponse C.','Seule la (1) compte : réponse A.'],ok:0},
+pieges:['Utiliser sans s’en rendre compte l’information (1) quand on teste la (2) seule.','Oublier de tester la (2) quand la (1) suffit déjà : la réponse est peut-être D, pas A.','Finir tous les calculs : c’est du temps perdu.'],
+reflexe:'Quand tu testes (2), cache mentalement (1). Et arrête-toi dès que tu sais qu’une valeur unique existe.',
+cartes:[['Réponse A ?','(1) suffit seule, (2) ne suffit pas.'],['Réponse B ?','(2) suffit seule, (1) ne suffit pas.'],['Réponse C ?','Aucune seule, mais les deux ensemble suffisent.'],['Réponse D ?','Chacune suffit seule.'],['Réponse E ?','Même ensemble, elles ne suffisent pas.'],['Dans quel ordre tester ?','(1) seule, puis (2) seule, puis les deux ensemble.']]},
+
+{id:'cm-ouv',sub:'cm',bloc:'Méthode',title:'Questions ouvertes et fermées',book:'fiches 101 et 102 (p. 334 à 337)',pre:['cm-grille'],
+intuition:`Question <b>ouverte</b> (« combien vaut x ? ») : l’information suffit si elle donne une valeur unique. Question <b>fermée</b> (« x est-il positif ? ») : elle suffit si elle donne une réponse certaine, oui ou non. Un « non » certain suffit autant qu’un « oui » ! Pour prouver qu’une information ne suffit pas, il suffit de trouver deux cas qui donnent des réponses différentes.`,
+regle:`<ul><li>Question fermée : chercher un contre-exemple. Deux cas compatibles avec l’information mais qui donnent des réponses différentes : insuffisant</li><li>Valeurs à tester : 0, 1, un négatif, une fraction entre 0 et 1, un grand nombre</li><li>x² = 16 ne donne pas x = 4, mais x = 4 ou x = −4</li><li>x² &gt; x est vrai pour x &gt; 1 ou x &lt; 0, faux entre 0 et 1</li></ul>`,
+ex:{enonce:'x est-il supérieur à y ? (1) x − y = 3. (2) x² > y².',steps:['(1) seule : x = y + 3, donc x est toujours plus grand. Oui, certain : suffit.','(2) seule : x = 3, y = 1 donne oui ; x = −3, y = 1 donne non. Deux réponses : ne suffit pas.','Réponse A.']},
+trou:{enonce:'x est-il positif ? (1) x² = 16.',steps:['x² = 16 donne x = 4 ou x = −4.','Deux réponses possibles : oui et non.','L’information ne suffit pas.'],blank:0,choices:['x² = 16 donne x = 4 ou x = −4.','x² = 16 donne x = 4 uniquement.','x² = 16 donne x = 8.'],ok:0},
+pieges:['Croire qu’une information qui répond « non » ne suffit pas : un non certain est une réponse.','Ne tester que des entiers positifs : les négatifs et les fractions cassent souvent le raisonnement.'],
+reflexe:'Sur une question fermée, cherche activement le cas qui fait échouer : teste 0, 1, −1 et 1/2 en quelques secondes.',
+cartes:[['Question fermée : une information qui donne toujours « non » ?','Elle suffit : la réponse est certaine.'],['Quelles valeurs tester pour trouver un contre-exemple ?','0, 1, un négatif, une fraction entre 0 et 1.'],['x² = 25 : que vaut x ?','5 ou −5 : pas de valeur unique.'],['Quand a-t-on x² > x ?','Pour x > 1 ou x < 0 (faux entre 0 et 1).']]},
+
+{id:'cm-parite',sub:'cm',bloc:'Méthode',title:'Parité et signes',book:'fiche 116 (p. 364)',pre:['cm-grille'],
+intuition:`La parité (pair ou impair) obéit à des règles simples, qui reviennent souvent en Conditions minimales. L’astuce : il suffit de tester un nombre pair et un nombre impair (2 et 1, par exemple) pour trancher.`,
+regle:`<ul><li>pair + pair = pair ; impair + impair = pair ; pair + impair = impair</li><li>pair × n’importe quoi = pair ; impair × impair = impair</li><li>n² a la même parité que n ; n(n + 1) est toujours pair</li><li>0 est pair</li><li>Signes : a × b &lt; 0 si a et b sont de signes contraires ; a × b &gt; 0 s’ils ont le même signe</li></ul>`,
+ex:{enonce:'n est un entier. n² + 3n est-il pair ?',steps:['n² + 3n = n × (n + 3).','Si n est pair, le produit est pair. Si n est impair, n + 3 est pair, donc le produit est pair.','Toujours pair.']},
+trou:{enonce:'a et b sont des entiers et a + b est impair. a × b est-il pair ?',steps:['a + b impair : l’un est pair, l’autre impair.','pair × impair = pair.','a × b est pair.'],blank:0,choices:['a + b impair : l’un est pair, l’autre impair.','a + b impair : les deux sont impairs.','a + b impair : les deux sont pairs.'],ok:0},
+pieges:['Un produit pair ne signifie pas que les deux facteurs sont pairs : un seul suffit.','Oublier que 0 est pair, et qu’un entier peut être négatif.'],
+reflexe:'Remplace par 1, puis par 2 : deux essais suffisent presque toujours pour conclure sur la parité.',
+cartes:[['impair + impair ?','pair.'],['impair × impair ?','impair.'],['n(n + 1) ?','Toujours pair (deux entiers consécutifs).'],['0 est-il pair ?','Oui.'],['a × b < 0 ?','a et b sont de signes contraires.']]},
+
+{id:'logi-methode',sub:'logi',bloc:'Séries',title:'Méthode générale et écarts',book:'fiches 159, 162 et 163 (p. 514 à 523)',
+intuition:`Une série est fabriquée par une règle ; ton travail est de la retrouver. La méthode est toujours la même : on écrit les <b>écarts</b> entre termes consécutifs. S’ils ne disent rien, on regarde les écarts des écarts, puis les rapports (× ou ÷), puis on lit un terme sur deux.`,
+regle:`<ol><li>Écarts entre termes consécutifs : constants ? croissants ?</li><li>Écarts des écarts</li><li>Rapports : × 2, × 3, parfois × 2 + 1</li><li>Alternance : deux séries mêlées, un terme sur deux</li><li>Nombres remarquables : carrés, cubes, premiers</li><li>Chaque terme est la somme des deux précédents</li></ol>`,
+ex:{enonce:'Quel nombre complète la série 3, 5, 9, 17, 33, ?',steps:['Écarts : 2, 4, 8, 16.','Les écarts doublent : le suivant est 32.','33 + 32 = 65.']},
+trou:{enonce:'Quel nombre complète la série 2, 5, 10, 17, 26, ?',steps:['Écarts : 3, 5, 7, 9.','Les écarts augmentent de 2 : le suivant est 11.','26 + 11 = 37.'],blank:1,choices:['Les écarts augmentent de 2 : le suivant est 11.','Les écarts sont impairs : le suivant est 13.','L’écart moyen est 6 : le suivant est 6.'],ok:0},
+pieges:['Les leurres : une réponse qui prolonge une règle valable sur les trois premiers termes seulement.','Valider une règle sans la vérifier sur tous les termes.'],
+reflexe:'Écris les écarts sous la série dès la première seconde : la grande majorité des séries se résolvent aux étapes 1 à 3.',
+cartes:[['Première chose à faire devant une série ?','Écrire les écarts entre termes consécutifs.'],['Écarts 2, 4, 8, 16 ?','Ils doublent : prochain écart 32.'],['La série monte et descend en zigzag ?','Sans doute une alternance : lire un terme sur deux.'],['Comment éviter un leurre ?','Vérifier la règle sur tous les termes.']]},
+
+{id:'logi-remarquables',sub:'logi',bloc:'Séries',title:'Nombres remarquables',book:'fiches 180 à 182 (p. 560 à 565)',skill:'carres',pre:['logi-methode'],
+intuition:`Beaucoup de séries reposent sur des nombres qu’il faut reconnaître instantanément : carrés, cubes, nombres premiers, puissances de 2. Si les termes sont « presque » des carrés (un de plus, un de moins), c’est un indice fort.`,
+regle:`<ul><li>Carrés : 121, 144, 169, 196, 225, 256, 289, 324, 361, 400</li><li>Cubes : 8, 27, 64, 125, 216, 343, 512, 729, 1 000</li><li>Premiers : 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97</li><li>Puissances de 2 : 32, 64, 128, 256, 512, 1 024</li><li>n × (n + 1) : 2, 6, 12, 20, 30, 42, 56</li></ul>`,
+ex:{enonce:'Quel nombre complète la série 3, 8, 15, 24, 35, ?',steps:['Ces nombres sont juste en dessous de 4, 9, 16, 25, 36.','Règle : n² − 1.','Suivant : 7² − 1 = 48.']},
+trou:{enonce:'Quel nombre complète la série 2, 3, 5, 7, 11, ?',steps:['Ce sont les nombres premiers.','Après 11, le suivant est 13.'],blank:1,choices:['Après 11, le suivant est 13.','Après 11, le suivant est 15.','Après 11, le suivant est 12.'],ok:0},
+pieges:['1 n’est pas premier, et 2 est le seul premier pair.','Une même série peut s’expliquer de deux façons : n² + 1 donne aussi des écarts 3, 5, 7… Les deux mènent au même résultat, prends la plus rapide.'],
+reflexe:'Des termes proches de 100, 121, 144, 169 ou 196 : pense aux carrés avant tout calcul d’écarts.',
+cartes:[['17² ?','289.'],['19² ?','361.'],['13² ?','169.'],['7³ ?','343.'],['2¹⁰ ?','1 024.'],['Nombres premiers entre 50 et 70 ?','53, 59, 61, 67.']]},
+
+{id:'logi-lettres',sub:'logi',bloc:'Séries',title:'Séries de lettres',book:'fiches 161 et 183 (p. 518 et p. 568)',skill:'lettres',pre:['logi-methode'],
+intuition:`Une série de lettres est une série de nombres déguisée : on remplace chaque lettre par son rang dans l’alphabet (A = 1, B = 2… Z = 26), on applique la méthode des écarts, puis on reconvertit.`,
+regle:`<ul><li>Repères E, J, O, T, Y : E = 5, J = 10, O = 15, T = 20, Y = 25</li><li>Après Z, on repart à A : on retire 26 (28 donne B)</li><li>Rang inversé : Z = 1, Y = 2… (rang inversé = 27 − rang)</li><li>Autres pistes : voyelles et consonnes, lettres symétriques, nombre de traits</li></ul>`,
+ex:{enonce:'Quelle lettre complète la série C, F, I, L, ?',steps:['Rangs : 3, 6, 9, 12.','Écart constant de 3 : 15.','15 = O.']},
+trou:{enonce:'Quelle lettre complète la série B, D, H, P, ?',steps:['Rangs : 2, 4, 8, 16.','Chaque rang double : 32.','32 − 26 = 6 : F.'],blank:2,choices:['32 − 26 = 6 : F.','32 dépasse l’alphabet : Z.','16 + 2 = 18 : R.'],ok:0},
+pieges:['Oublier de repartir à A après Z.','Se tromper d’un cran en comptant sur ses doigts : utilise les repères E, J, O, T, Y.'],
+reflexe:'E, J, O, T, Y : 5, 10, 15, 20, 25. Pour M : O = 15, donc M = 13.',
+cartes:[['Rang de O ?','15.'],['Rang de T ?','20.'],['Lettre n° 18 ?','R.'],['Les repères E, J, O, T, Y ?','E = 5, J = 10, O = 15, T = 20, Y = 25.'],['Y + 4 ?','C (25 + 4 = 29, et 29 − 26 = 3).']]},
+
+{id:'logi-grilles',sub:'logi',bloc:'Grilles',title:'Grilles de nombres',book:'fiches 165 à 171 (p. 528 à 541)',pre:['logi-methode'],
+intuition:`Dans une grille, la règle circule dans une direction. Au lieu de fixer la case vide, on teste les directions une par une : chaque ligne, puis chaque colonne, puis la relation entre colonnes, puis les sommes.`,
+regle:`<ol><li>Chaque ligne suit-elle la même règle (écart, ×) ?</li><li>Chaque colonne ?</li><li>Une colonne se calcule-t-elle à partir des deux autres (somme, produit, différence) ?</li><li>Les lignes ou les colonnes ont-elles une somme constante ?</li><li>Les diagonales</li></ol>`,
+ex:{enonce:'Quelle est la case manquante ?',grid:[[2,4,6],[3,6,9],[4,8,'?']],steps:['Ligne 1 : écart de 2. Ligne 2 : écart de 3.','Ligne 3 : 4, 8… écart de 4.','8 + 4 = 12.']},
+trou:{enonce:'Quelle est la case manquante ?',grid:[[5,3,7],[4,9,2],[6,1,'?']],steps:['Somme de la ligne 1 : 5 + 3 + 7 = 15.','Somme de la ligne 2 : 4 + 9 + 2 = 15.','6 + 1 + ? = 15, donc ? = 8.'],blank:2,choices:['6 + 1 + ? = 15, donc ? = 8.','6 + 1 = 7, donc ? = 7.','Écart de 3 : ? = 6 + 3 = 9.'],ok:0},
+pieges:['S’acharner sur les lignes alors que la règle est en colonnes.','Oublier qu’une colonne peut être le résultat des deux autres (c = a + b, c = a × b).'],
+reflexe:'Commence par une ligne ou une colonne complète : c’est elle qui donne la règle. La case vide ne sert qu’à l’appliquer.',
+cartes:[['Dans quel ordre tester une grille ?','Lignes, colonnes, relation entre colonnes, sommes constantes, diagonales.'],['Somme constante : comment trouver la case vide ?','Somme d’une ligne complète, moins les nombres connus de la ligne incomplète.'],['Une colonne dépend des deux autres ?','Tester somme, produit et différence sur une ligne complète.']]}
+];
+const CBYID=Object.fromEntries(CONCEPTS.map(c=>[c.id,c]));
+const SKILL_NAMES={mult:'Calcul mental',frac:'Fractions',pct:'Pourcentages',carres:'Carrés et puissances',lettres:'Rangs des lettres'};
+const BOOKP={calc:{1:199,2:208,3:219},cm:{1:379,2:390,3:401},logi:{1:605,2:615,3:625},blanc:{4:714,5:786,6:856,7:925,8:994}};
+/* ============ Générateurs de questions (une nouvelle variante à chaque fois) ============ */
+function swapAB(t){const sw=s=>s.replace(/\(1\)/g,'§§').replace(/\(2\)/g,'(1)').replace(/§§/g,'(2)');return Object.assign({},t,{i1:t.i2,i2:t.i1,a:t.a===0?1:t.a===1?0:t.a,ex:sw(t.ex)})}
+const maybeSwap=t=>Math.random()<.5?t:swapAB(t);
+const cmQ=t=>Object.assign({cm:true,opts:CM_OPTS},t);
+const ser=(arr,f=fr)=>`<div class="series">${arr.map(f).join(', ')}, ?</div>`;
+
+const G={};
+G['calc-mental']=()=>{
+  const t=pick(['x25','x11','x99','n5','x5','x9']);let a,ans,q,ex;
+  if(t==='x25'){a=R(12,96);ans=a*25;q=`${a} × 25 = ?`;ex=`× 25, c’est × 100 puis ÷ 4 : ${fr(a*100)} ÷ 4 = ${fr(ans)}.`}
+  else if(t==='x11'){a=R(12,98);ans=a*11;const d=Math.floor(a/10),u=a%10;q=`${a} × 11 = ?`;ex=`× 11 : on écrit ${d}, puis ${d} + ${u} = ${d+u}, puis ${u}${d+u>=10?' (le 1 de '+(d+u)+' part en retenue sur le '+d+')':''}. Résultat : ${fr(ans)}.`}
+  else if(t==='x99'){a=R(13,89);ans=a*99;q=`${a} × 99 = ?`;ex=`× 99, c’est × 100 moins le nombre : ${fr(a*100)} − ${a} = ${fr(ans)}.`}
+  else if(t==='n5'){const n=R(1,9);a=n*10+5;ans=a*a;q=`${a}² = ?`;ex=`Nombre qui finit par 5 : ${n} × ${n+1} = ${n*(n+1)}, puis on accole 25. Résultat : ${fr(ans)}.`}
+  else if(t==='x5'){a=R(112,988);ans=a*5;q=`${a} × 5 = ?`;ex=`× 5, c’est × 10 puis ÷ 2 : ${fr(a*10)} ÷ 2 = ${fr(ans)}.`}
+  else {a=R(23,97);ans=a*9;q=`${a} × 9 = ?`;ex=`× 9, c’est × 10 moins le nombre : ${a*10} − ${a} = ${ans}.`}
+  return Object.assign({q:`Calculer de tête : <span class="mono">${q}</span>`,ex},numOpts(ans,[ans+10,ans-10,ans+100,ans-100,ans+1,ans+a,ans-a]));
+};
+G['calc-fractions']=()=>{
+  const t=pick(['of','div','dec','sum']);
+  if(t==='of'){const m=pick([3,4,5,6,8]);let k;do{k=R(1,m-1)}while(gcd(k,m)!==1);const n=m*R(3,18),ans=k*n/m;
+    return Object.assign({q:`Combien font les ${k}/${m} de ${n} ?`,ex:`On divise d’abord, les nombres restent petits : ${n} ÷ ${m} = ${n/m}, puis × ${k} = ${ans}.`},numOpts(ans,[n/m,ans+n/m,ans-n/m,n-ans,k*n]))}
+  if(t==='div'){const [x,inv,lab]=pick([[0.25,4,'× 4'],[0.5,2,'× 2'],[0.75,4/3,'× 4/3'],[0.125,8,'× 8'],[0.2,5,'× 5']]);const n=x===0.75?3*R(4,30):R(6,60);const ans=Math.round(n*inv);
+    return Object.assign({q:`Combien font ${fr(n)} ÷ ${fr(x,3)} ?`,ex:`Diviser par ${fr(x,3)}, c’est multiplier par l’inverse (${lab}) : ${fr(ans)}. Diviser par un nombre plus petit que 1 agrandit.`},numOpts(ans,[n*x,ans/2,ans*2,n/(x*10),ans+n]))}
+  if(t==='dec'){const T=[['1/8','0,125'],['3/8','0,375'],['5/8','0,625'],['7/8','0,875'],['1/6','≈ 0,167'],['5/6','≈ 0,833'],['2/3','≈ 0,667'],['1/12','≈ 0,083'],['3/4','0,75'],['4/5','0,8'],['1/9','≈ 0,111'],['3/5','0,6']];
+    const [f,v]=pick(T);const others=shuffle(T.filter(x=>x[1]!==v)).map(x=>x[1]);
+    const o=strOpts(v,others);return Object.assign({q:`Quelle est la valeur décimale de ${f} ?`,ex:`${f} = ${v.replace('≈ ','environ ')}. Repère utile : 1/8 = 0,125, 1/6 ≈ 0,167, 1/3 ≈ 0,333.`},o)}
+  const b=pick([2,3,4,5,6]),d=pick([3,4,6,8,9,10].filter(x=>x!==b));const a=R(1,b-1),c=R(1,d-1);
+  const num=a*d+c*b,den=b*d,g=gcd(num,den);const ans=`${num/g}/${den/g}`;
+  const val=num/den;const cands=[[a+c,b+d],[a*c,b*d],[a+c,b*d],[num+1,den],[num-1,den],[num,den*2]].filter(([p,q])=>q>0&&p>0&&Math.abs(p/q-val)>1e-9).map(([p,q])=>{const h=gcd(p,q);return `${p/h}/${q/h}`});
+  return Object.assign({q:`Combien font ${a}/${b} + ${c}/${d} ?`,ex:`Même dénominateur (${den}) : ${a*d}/${den} + ${c*b}/${den} = ${num}/${den}${g>1?` = ${ans}`:''}. On n’additionne jamais les dénominateurs.`},strOpts(ans,cands));
+};
+G['calc-pct']=()=>{
+  const t=pick(['of','succ','init','rate']);
+  if(t==='of'){const p=pick([5,10,15,20,25,30,35,40,60,75]),n=20*R(2,30),ans=p*n/100;
+    return Object.assign({q:`Combien font ${p} % de ${n} ?`,ex:`10 % de ${n} = ${fr(n/10)}. Donc ${p} % = ${fr(n/10)} × ${fr(p/10)} = ${fr(ans)}.`},numOpts(ans,[ans+n/20,ans-n/20,p*n/10,ans*2,n-ans]))}
+  if(t==='succ'){const a=pick([10,20,25,30,50]),b=pick([10,20,25,40,50]);const up=Math.random()<.5;
+    const c1=up?1+a/100:1-a/100,c2=up?1-b/100:1+b/100,coef=c1*c2,ch=Math.round((coef-1)*10000)/100;
+    const txt=up?`augmente de ${a} %, puis baisse de ${b} %`:`baisse de ${a} %, puis augmente de ${b} %`;
+    return Object.assign({q:`Un prix ${txt}. Quelle est l’évolution globale ?`,ex:`Coefficients : × ${fr(c1)} puis × ${fr(c2)}, soit × ${fr(coef,4)}. Évolution : ${pctS(ch)}. On ne fait jamais la somme des pourcentages (qui donnerait ${pctS(up?a-b:b-a)}).`},numOpts(ch,[up?a-b:b-a,ch+1,ch-1,ch+2,-ch,ch-2],pctS))}
+  if(t==='init'){const up=Math.random()<.6;const tt=up?pick([10,20,25,50]):pick([10,20,25,40]);const init=20*R(2,20);const coef=up?1+tt/100:1-tt/100;const fin=Math.round(init*coef*100)/100;
+    return Object.assign({q:`Après ${up?'une hausse':'une baisse'} de ${tt} %, un article coûte ${eur(fin)}. Quel était son prix de départ ?`,ex:`Coefficient × ${fr(coef)}. On revient en arrière en divisant : ${eur(fin)} ÷ ${fr(coef)} = ${eur(init)}. Piège : ${up?'retirer':'ajouter'} ${tt} % au prix final donne ${eur(fin*(up?1-tt/100:1+tt/100))}, ce qui est faux.`},numOpts(init,[fin*(up?1-tt/100:1+tt/100),up?fin-tt:fin+tt,init+10,init-10,fin],eur))}
+  const A=20*R(2,20),c=pick([5,10,15,20,25,30,40,50,-10,-20,-25,-40]),B=A*(1+c/100);
+  return Object.assign({q:`Une valeur passe de ${fr(A)} à ${fr(B)}. Quel est le taux d’évolution ?`,ex:`(${fr(B)} − ${fr(A)}) ÷ ${fr(A)} = ${fr(c/100)}, soit ${pctS(c)}. On divise toujours par la valeur de départ.`},numOpts(c,[Math.round((B-A)/B*10000)/100,c+5,c-5,-c,c+10],pctS));
+};
+G['calc-prop']=()=>{
+  const t=pick(['direct','inverse','multiple']);
+  if(t==='direct'){const k=pick([3,4,5,6,8]),u=pick([1.5,2,2.5,3,1.2,0.75,3.5]),m=pick([7,9,10,12,15].filter(x=>x!==k)),tot=k*u,ans=m*u;
+    return Object.assign({q:`${k} carnets coûtent ${eur(tot)}. Combien coûtent ${m} carnets ?`,ex:`Prix d’un carnet : ${eur(tot)} ÷ ${k} = ${eur(u)}. Pour ${m} : ${m} × ${eur(u)} = ${eur(ans)}.`},numOpts(ans,[ans+u,ans-u,tot+m,tot*m/10,ans+2*u],eur))}
+  if(t==='inverse'){const w=pick([3,4,5,6,8]),d=pick([10,12,15,18,20,24]),work=w*d;const cand=[2,3,4,5,6,8,9,10,12].filter(x=>x!==w&&work%x===0);const w2=pick(cand),ans=work/w2;
+    return Object.assign({q:`${w} ouvriers construisent un mur en ${d} jours. Combien de jours faut-il à ${w2} ouvriers travaillant au même rythme ?`,ex:`Situation inverse : le produit reste constant. Travail total : ${w} × ${d} = ${work} jours-ouvrier. Avec ${w2} ouvriers : ${work} ÷ ${w2} = ${fr(ans)} jours.`},numOpts(ans,[d*w2/w,ans+1,ans-1,ans+2,d]))}
+  const m1=pick([2,3,4]),h1=pick([2,3,4,5]),r=pick([5,6,8,10,12,15]),p1=m1*h1*r,m2=pick([4,5,6,8].filter(x=>x!==m1)),h2=pick([3,4,6,7].filter(x=>x!==h1)),ans=m2*h2*r;
+  return Object.assign({q:`${m1} machines fabriquent ${p1} pièces en ${h1} heures. Combien de pièces fabriquent ${m2} machines en ${h2} heures ?`,ex:`Une machine fait ${p1} ÷ (${m1} × ${h1}) = ${r} pièces par heure. Donc ${m2} × ${h2} × ${r} = ${ans} pièces.`},numOpts(ans,[p1*m2/m1,p1*h2/h1,ans+r,ans-r,ans+m2*r]));
+};
+G['calc-moy']=()=>{
+  const t=pick(['missing','pond','retrait']);
+  if(t==='missing'){let n,m,tg,x;do{n=pick([3,4,5,6]);m=R(9,14);tg=m+R(1,2);x=tg*(n+1)-m*n}while(x>20||x<0);
+    return Object.assign({q:`La moyenne de ${n} notes est ${m}. Quelle note faut-il obtenir à la suivante pour avoir ${tg} de moyenne ?`,ex:`Total actuel : ${n} × ${m} = ${n*m}. Total visé : ${n+1} × ${tg} = ${tg*(n+1)}. Note nécessaire : ${tg*(n+1)} − ${n*m} = ${x}.`},numOpts(x,[2*tg-m,x+1,x-1,x+2,tg]))}
+  if(t==='pond'){let nA,mA,nB,mB,ans,k=0;do{nA=pick([10,20,30]);mA=R(12,24);nB=pick([10,20,30,40].filter(v=>v!==nA));mB=R(8,16);ans=(nA*mA+nB*mB)/(nA+nB);k++}while((!Number.isInteger(ans)||mA===mB)&&k<200);
+    return Object.assign({q:`Un groupe de ${nA} personnes a une moyenne d’âge de ${mA} ans ; un autre groupe de ${nB} personnes, de ${mB} ans. Quelle est la moyenne d’âge de l’ensemble ?`,ex:`Total : ${nA} × ${mA} + ${nB} × ${mB} = ${nA*mA+nB*mB}. Effectif : ${nA+nB}. Moyenne : ${fr(ans)} ans. La moyenne simple (${fr((mA+mB)/2)}) est un piège : les groupes n’ont pas la même taille.`},numOpts(ans,[(mA+mB)/2,ans+1,ans-1,ans+2]))}
+  let n,m,x,ans,k=0;do{n=pick([5,6,8,10]);m=R(12,20);x=R(m+3,m+18);ans=(n*m-x)/(n-1);k++}while(!Number.isInteger(ans)&&k<300);
+  return Object.assign({q:`La moyenne de ${n} nombres est ${m}. On retire le nombre ${x}. Quelle est la nouvelle moyenne ?`,ex:`Total : ${n} × ${m} = ${n*m}. Sans ${x} : ${n*m-x}, pour ${n-1} nombres. Moyenne : ${fr(ans)}.`},numOpts(ans,[ans+1,ans-1,m,(n*m-x)/n,ans-2]));
+};
+G['calc-vitesse']=()=>{
+  const t=pick(['dist','ar','crois','ratt']);
+  if(t==='dist'){let v,tm,d;do{v=pick([36,40,45,48,60,72,75,80,90,96,120]);tm=pick([15,20,25,40,45,50,75,80,90,100]);d=v*tm/60}while(!Number.isInteger(d));
+    const trap=tm>=60?v*(1+(tm-60)/100):v*tm/100;
+    return Object.assign({q:`Un véhicule roule à ${v} km/h pendant ${fmtH(tm/60)}. Quelle distance parcourt-il ?`,ex:`${fmtH(tm/60)} = ${tm}/60 h = ${fr(tm/60,3)} h. Distance : ${v} × ${fr(tm/60,3)} = ${fr(d)} km.${tm>=60?` Piège : ${fmtH(tm/60)} ne vaut pas ${fr(1+(tm-60)/100)} h.`:''}`},numOpts(d,[trap,d+5,d-5,d*1.2,d+10],x=>fr(x)+' km'))}
+  if(t==='ar'){const [v1,v2,ans]=pick([[60,40,48],[30,60,40],[60,90,72],[80,120,96],[45,90,60],[20,30,24],[50,75,60],[100,150,120],[60,120,80],[40,60,48]]);
+    return Object.assign({q:`Un trajet se fait à l’aller à ${v1} km/h et au retour à ${v2} km/h. Quelle est la vitesse moyenne sur l’aller-retour ?`,ex:`2 × ${v1} × ${v2} ÷ (${v1} + ${v2}) = ${2*v1*v2} ÷ ${v1+v2} = ${ans} km/h. La moyenne des vitesses (${fr((v1+v2)/2)}) est le piège : on passe plus de temps à la vitesse lente.`},numOpts(ans,[(v1+v2)/2,ans+4,ans-4,ans+8,ans-6],x=>fr(x)+' km/h'))}
+  if(t==='crois'){const v1=pick([40,50,60,70,80]),v2=pick([30,50,60,90,100].filter(x=>x!==v1)),tt=pick([1.5,2,2.5,3]),d=(v1+v2)*tt;
+    return Object.assign({q:`Deux trains distants de ${d} km roulent l’un vers l’autre, à ${v1} km/h et ${v2} km/h. Au bout de combien de temps se croisent-ils ?`,ex:`Ils se rapprochent de ${v1} + ${v2} = ${v1+v2} km par heure. Temps : ${d} ÷ ${v1+v2} = ${fmtH(tt)}.`},numOpts(tt,[tt+0.5,tt-0.5,tt*2,tt+1,d/Math.max(v1,v2)],fmtH))}
+  let v1,v2,h0,ans,k=0;do{v1=pick([12,15,20,30,40]);v2=v1+pick([10,20,30,40]);h0=pick([0.5,1,1.5,2]);ans=v1*h0/(v2-v1);k++}while((!Number.isInteger(Math.round(ans*60*1000)/1000)||ans>4||ans*60<10)&&k<300);
+  return Object.assign({q:`Un cycliste part à ${v1} km/h. ${fmtH(h0)} plus tard, un scooter part du même point, dans le même sens, à ${v2} km/h. Combien de temps après son départ le scooter rattrape-t-il le cycliste ?`,ex:`Avance du cycliste : ${v1} × ${fr(h0)} = ${fr(v1*h0)} km. Le scooter la comble à ${v2} − ${v1} = ${v2-v1} km/h. Temps : ${fr(v1*h0)} ÷ ${v2-v1} = ${fmtH(ans)}.`},numOpts(ans,[v1*h0/(v2+v1),ans+h0,ans*2,ans+0.5,ans-0.25],fmtH));
+};
+G['calc-travail']=()=>{
+  const TR=[[3,6,2],[4,12,3],[6,12,4],[10,15,6],[12,24,8],[20,30,12],[2,6,1.5],[4,4,2],[5,20,4],[8,24,6],[9,18,6],[15,10,6],[6,3,2]];
+  const t=pick(['two','alone','fill']);
+  if(t==='two'){const [a,b,ans]=pick(TR);return Object.assign({q:`A fait un travail seul en ${a} h, B le fait seul en ${b} h. En combien de temps le font-ils ensemble ?`,ex:`Par heure : 1/${a} + 1/${b} = 1/${fr(ans)} du travail. Ensemble : ${a} × ${b} ÷ (${a} + ${b}) = ${fmtH(ans)}. Additionner les durées (${a+b} h) est absurde.`},numOpts(ans,[a+b,(a+b)/2,ans+1,Math.min(a,b),ans+0.5],fmtH))}
+  if(t==='alone'){const [a,b,T]=pick(TR.filter(x=>x[0]!==x[1]));return Object.assign({q:`Ensemble, A et B font un travail en ${fmtH(T)}. Seul, A met ${a} h. Combien de temps met B seul ?`,ex:`Part de B par heure : 1/${fr(T)} − 1/${a} = 1/${b}. B seul : ${b} h.`},numOpts(b,[a-T,a+T,b+1,b*2,T*2],fmtH))}
+  const [f,d,ans]=pick([[4,12,6],[3,6,6],[6,12,12],[2,6,3],[3,12,4],[4,6,12],[6,10,15],[10,15,30]]);
+  return Object.assign({q:`Un robinet remplit une cuve en ${f} h ; une fuite la vide en ${d} h. Robinet ouvert et fuite active, en combien de temps la cuve est-elle pleine ?`,ex:`Par heure : 1/${f} − 1/${d} = 1/${ans}. La cuve est pleine en ${ans} h.`},numOpts(ans,[d-f,f*d/(f+d),ans+2,ans/2,f+d],fmtH));
+};
+const lin=(a,b)=>`${a===1?'':a}x${b>0?' + '+b:b<0?' − '+(-b):''}`;
+G['calc-eq']=()=>{
+  const t=pick(['sys','age','billets','lin']);
+  if(t==='sys'){const x=R(4,14),y=R(1,x-1),ask=pick(['x','y']),ans=ask==='x'?x:y;
+    return Object.assign({q:`x + y = ${x+y} et x − y = ${x-y}. Que vaut ${ask} ?`,ex:`En additionnant : 2x = ${2*x}, donc x = ${x}. Puis y = ${x+y} − ${x} = ${y}. On demandait ${ask} : ${ans}.`},numOpts(ans,[ask==='x'?y:x,ans+1,ans-1,x+y,ans+2]))}
+  if(t==='age'){let k,f,n,r,ok=false;for(let tries=0;tries<400&&!ok;tries++){k=pick([3,4,5]);f=R(4,15);n=R(1,30);r=(k*f+n)/(f+n);ok=Number.isInteger(r)&&r>=2&&r<k}
+    if(!ok){k=3;f=12;n=12;r=2}
+    return Object.assign({q:`Un père a ${k} fois l’âge de sa fille. Dans ${n} ans, il aura ${r} fois son âge. Quel âge a le père aujourd’hui ?`,ex:`Fille : f, père : ${k}f. ${k}f + ${n} = ${r}(f + ${n}), donc ${k-r}f = ${r*n-n}, f = ${f}. Le père a ${k*f} ans (on demandait le père, pas la fille).`},numOpts(k*f,[f,k*f+n,k*f+k,k*f-k,r*f]))}
+  if(t==='billets'){const N=R(8,20),tt=R(2,N-2),S=5*N+5*tt;
+    return Object.assign({q:`${N} billets de 5 € et de 10 € font ${S} € au total. Combien y a-t-il de billets de 10 € ?`,ex:`Si tous valaient 5 € : ${5*N} €. Il manque ${S-5*N} €, et chaque billet de 10 € ajoute 5 € : ${S-5*N} ÷ 5 = ${tt} billets de 10 €. (Backsolving possible : tester C.)`},numOpts(tt,[N-tt,tt+1,tt-1,tt+2,tt-2]))}
+  const x=R(-5,12),a=R(3,9),c=R(1,a-1),b=R(-12,15),d=(a-c)*x+b;
+  return Object.assign({q:`Résoudre : ${lin(a,b)} = ${lin(c,d)}`,ex:`On regroupe les x : ${a-c}x = ${fr(d-b)}, donc x = ${fr(x)}.`},numOpts(x,[x+1,x-1,-x,(d+b)/(a-c),x+2]));
+};
+
+G['cm-grille']=()=>{
+  const T=[
+  ()=>{const x=R(3,12),y=R(1,x-1);return {q:'x et y sont deux nombres. Que vaut x ?',i1:`x + y = ${x+y}`,i2:`x − y = ${x-y}`,a:2,ex:`(1) seule et (2) seule sont chacune une équation à deux inconnues : infinité de solutions. Ensemble, on additionne : 2x = ${2*x}, x = ${x}. Réponse C.`}},
+  ()=>{const s=R(8,30);return {q:'x et y sont deux nombres. Que vaut x ?',i1:`x + y = ${s}`,i2:`2x + 2y = ${2*s}`,a:4,ex:`La (2) est la (1) multipliée par 2 : elle n’apporte rien. Une seule vraie équation pour deux inconnues : même ensemble, impossible. Réponse E.`}},
+  ()=>{const u=pick([1.5,2,2.5,3,1.2,0.8]),k=pick([3,4,5,6]),m=pick([8,10,12,15]);return {q:'Tous les cahiers ont le même prix. Combien coûte un cahier ?',i1:`${k} cahiers coûtent ${eur(k*u)}.`,i2:`${m} cahiers coûtent ${eur(m*u)}.`,a:3,ex:`(1) seule : ${eur(k*u)} ÷ ${k} = ${eur(u)}, suffit. (2) seule : ${eur(m*u)} ÷ ${m} = ${eur(u)}, suffit aussi. Réponse D.`}},
+  ()=>{const f=R(10,18);let g;do{g=R(8,16)}while(g===f);const d=f-g;return maybeSwap({q:'Combien d’élèves compte la classe ?',i1:`Il y a ${f} filles et ${g} garçons.`,i2:`Il y a ${Math.abs(d)} ${d>0?(Math.abs(d)>1?'filles de plus que de garçons':'fille de plus que de garçons'):(Math.abs(d)>1?'garçons de plus que de filles':'garçon de plus que de filles')}.`,a:0,ex:`(1) seule : ${f} + ${g} = ${f+g}, suffit. (2) seule donne un écart, pas un total : ne suffit pas. Réponse A.`})},
+  ()=>{const N=20*R(1,5),p=pick([20,25,40,60,75]);return {q:'Un sac contient des billes rouges et des billes bleues. Combien y a-t-il de billes rouges ?',i1:`Il y a ${N} billes en tout.`,i2:`${p} % des billes sont bleues.`,a:2,ex:`(1) seule : le total ne dit rien de la répartition. (2) seule : une proportion sans total ne donne pas de nombre. Ensemble : ${N} × ${100-p} % = ${fr(N*(100-p)/100)} rouges. Réponse C.`}},
+  ()=>maybeSwap({q:'n est un entier. n est-il pair ?',i1:'3n est pair.',i2:'n² + n est pair.',a:0,ex:'(1) : 3 est impair, donc si 3n est pair, n est pair. Suffit. (2) : n² + n = n(n + 1) est toujours pair, quel que soit n : ne permet pas de conclure. Réponse A.'}),
+  ()=>{const k=pick([2,4,6]);return {q:'Quel âge a Léa ?',i1:`Léa a ${k} ans de plus que Tom.`,i2:'La somme de leurs âges est un nombre pair.',a:4,ex:`(1) donne un écart, pas un âge. (2) ne donne qu’une parité. Ensemble, Léa peut avoir ${k+1} ans, ${k+2} ans, ou bien d’autres âges : pas de valeur unique. Réponse E.`}},
+  ()=>{const v=pick([40,48,60,80,100]),t=pick([2,3]);return {q:'Un train roule à vitesse constante. Quelle est sa vitesse ?',i1:`Il parcourt ${v*t} km en ${t} h.`,i2:`Il parcourt ${v/4} km en 15 minutes.`,a:3,ex:`(1) seule : ${v*t} ÷ ${t} = ${v} km/h, suffit. (2) seule : 15 min = 1/4 h, ${v/4} × 4 = ${v} km/h, suffit. Réponse D.`}},
+  ()=>{const l=R(2,9);return {q:'Quelle est l’aire d’un rectangle ?',i1:`Son périmètre mesure ${6*l} cm.`,i2:'Sa longueur est le double de sa largeur.',a:2,ex:`(1) seule : beaucoup de rectangles ont ce périmètre. (2) seule : une forme, pas une taille. Ensemble : 2 × (2l + l) = ${6*l}, donc l = ${l}, L = ${2*l}, aire = ${2*l*l} cm². Réponse C.`}}
+  ];
+  return cmQ(pick(T)());
+};
+G['cm-ouv']=()=>{
+  const T=[
+  ()=>{const a=R(2,9);return maybeSwap({q:'x est-il positif ?',i1:`x² = ${a*a}`,i2:`x³ = ${a**3}`,a:1,ex:`(1) : x = ${a} ou x = −${a}, deux réponses possibles : ne suffit pas. (2) : un cube garde le signe, donc x = ${a} : oui, certain. Suffit. Réponse B.`})},
+  ()=>{const k=R(1,9);return maybeSwap({q:'x est-il supérieur à y ?',i1:`x − y = ${k}`,i2:'x² > y²',a:0,ex:`(1) : x = y + ${k}, donc x > y dans tous les cas. Suffit. (2) : x = 3, y = 1 donne oui ; x = −3, y = 1 donne non. Ne suffit pas. Réponse A.`})},
+  ()=>{const k=pick([1,3,5,7]);return maybeSwap({q:'n est un entier. n est-il pair ?',i1:`n + ${k} est pair.`,i2:'2n est pair.',a:0,ex:`(1) : n + ${k} est pair et ${k} est impair, donc n est impair. Réponse certaine : « non ». Suffit, car un non certain est une réponse. (2) : 2n est pair pour tout entier : ne suffit pas. Réponse A.`})},
+  ()=>({q:'a est-il supérieur à b ?',i1:'a ÷ b > 1',i2:'b > 0',a:2,ex:'(1) seule : a = 6, b = 3 donne oui ; a = −6, b = −3 donne aussi a ÷ b = 2, mais a < b. Ne suffit pas. (2) seule : ne dit rien de a. Ensemble : b est positif, on multiplie a ÷ b > 1 par b sans changer le sens : a > b. Réponse C.'}),
+  ()=>maybeSwap({q:'x est-il inférieur à 1 ?',i1:'x² < 1',i2:'x < 2',a:0,ex:'(1) : x² < 1 signifie −1 < x < 1, donc x < 1 : oui, certain. Suffit. (2) : x = 0 donne oui, x = 1,5 donne non. Ne suffit pas. Réponse A.'}),
+  ()=>({q:'x est-il supérieur à x² ?',i1:'x > 0',i2:'x < 1',a:2,ex:'(1) seule : x = 1/2 donne oui (1/2 > 1/4) ; x = 3 donne non. (2) seule : x = 1/2 donne oui ; x = −2 donne non. Ensemble, 0 < x < 1 : x² < x dans tous les cas. Réponse C.'}),
+  ()=>({q:'Le produit a × b est-il positif ?',i1:'a > 0',i2:'b < 0',a:2,ex:'(1) seule : le signe de b est inconnu. (2) seule : celui de a aussi. Ensemble : un positif fois un négatif donne un négatif. La réponse est un « non » certain, donc suffisant. Réponse C.'})
+  ];
+  return cmQ(pick(T)());
+};
+const PEXP=[['n + 1',n=>n+1],['2n',n=>2*n],['n²',n=>n*n],['3n',n=>3*n],['n² + n',n=>n*n+n],['n + 2',n=>n+2],['n² + 1',n=>n*n+1],['5n + 1',n=>5*n+1],['n³',n=>n**3],['2n + 1',n=>2*n+1],['n(n + 2)',n=>n*(n+2)],['n² − n',n=>n*n-n]];
+function genParityMCQ(){
+  const nPar=pick(['pair','impair']),want=pick(['paire','impaire']);const samples=nPar==='pair'?[2,0,4,-2,6]:[1,3,5,-1,7];
+  const par=v=>((v%2)+2)%2;const target=want==='paire'?0:1;
+  const always=PEXP.filter(([,f])=>samples.every(x=>par(f(x))===target)),never=PEXP.filter(([,f])=>samples.every(x=>par(f(x))!==target));
+  const c=pick(always),d=shuffle(never).slice(0,4);const opts=shuffle([c[0],...d.map(x=>x[0])]);const v=samples[0];
+  return {q:`n est un entier ${nPar}. Laquelle de ces expressions est forcément ${want} ?`,opts,a:opts.indexOf(c[0]),ex:`Teste avec n = ${v} : ${c[0]} vaut ${c[1](v)}, ${want === 'paire' ? 'pair' : 'impair'}. Les quatre autres donnent un résultat ${want==='paire'?'impair':'pair'} pour tout n ${nPar}.`};
+}
+G['cm-parite']=()=>{
+  if(Math.random()<.45)return genParityMCQ();
+  const T=[
+  ()=>maybeSwap({q:'a et b sont des entiers. a × b est-il pair ?',i1:'a est pair.',i2:'a + b est pair.',a:0,ex:'(1) : un seul facteur pair rend le produit pair. Suffit. (2) : a + b pair veut dire que a et b ont la même parité : tous deux pairs (produit pair) ou tous deux impairs (produit impair). Ne suffit pas. Réponse A.'}),
+  ()=>({q:'a et b sont des entiers. a + b est-il pair ?',i1:'a est impair.',i2:'b est impair.',a:2,ex:'(1) seule ou (2) seule : on ne connaît la parité que d’un des deux nombres. Ensemble : impair + impair = pair. Réponse C.'}),
+  ()=>({q:'n est un entier. n² est-il pair ?',i1:'n est pair.',i2:'n + 1 est pair.',a:3,ex:'(1) : n pair donne n² pair. Suffit. (2) : n + 1 pair donne n impair, donc n² impair : un « non » certain. Suffit aussi. Réponse D.'}),
+  ()=>({q:'n est un entier. n(n + 1) est-il pair ?',i1:'n > 10',i2:'n est premier.',a:3,ex:'n(n + 1) est le produit de deux entiers consécutifs : il est toujours pair. La réponse est « oui » quoi qu’on sache, donc chaque information suffit, même si elle ne sert à rien. Réponse D.'})
+  ];
+  return cmQ(pick(T)());
+};
+
+G['logi-methode']=()=>{
+  const t=pick(['arith','gap','geo','dbl','alt','fib']);let s=[],ans,ex;
+  if(t==='arith'){const d=pick([3,4,6,7,9,11,13]);const neg=Math.random()<.3;const a0=neg?R(80,120):R(2,40),dd=neg?-d:d;for(let i=0;i<6;i++)s.push(a0+i*dd);ans=a0+6*dd;ex=`Écart constant de ${dd>0?'+':'−'}${d} : ${s[5]} ${dd>0?'+':'−'} ${d} = ${ans}.`}
+  else if(t==='gap'){const a=R(1,15),d=R(1,5),c=pick([1,2,3]);let v=a,g=d;for(let i=0;i<6;i++){s.push(v);v+=g;g+=c}ans=v;const gaps=s.slice(1).map((x,i)=>x-s[i]);ex=`Écarts : ${gaps.join(', ')}. Ils augmentent de ${c} : le suivant est ${g-c}. ${s[5]} + ${g-c} = ${ans}.`}
+  else if(t==='geo'){const a=R(1,6),r=pick([2,3]);for(let i=0;i<5;i++)s.push(a*r**i);ans=a*r**5;ex=`Chaque terme est multiplié par ${r} : ${s[4]} × ${r} = ${ans}.`}
+  else if(t==='dbl'){const k=pick([1,-1,2,3]);const a=k===-1?R(2,6):R(1,6);let v=a;for(let i=0;i<5;i++){s.push(v);v=2*v+k}ans=v;ex=`Chaque terme est le double du précédent ${k>0?'plus':'moins'} ${Math.abs(k)} : ${s[4]} × 2 ${k>0?'+':'−'} ${Math.abs(k)} = ${ans}.`}
+  else if(t==='alt'){const a=R(5,30),x=R(3,9),y=R(1,x-1);let v=a;for(let i=0;i<6;i++){s.push(v);v+=i%2===0?x:-y}ans=v;ex=`Alternance : on ajoute ${x}, puis on retire ${y}. Après ${s[5]}, c’est le tour de −${y} : ${ans}.`}
+  else {const a=R(1,5),b=R(a,a+4);s=[a,b];while(s.length<6)s.push(s[s.length-1]+s[s.length-2]);ans=s[4]+s[5];ex=`Chaque terme est la somme des deux précédents : ${s[4]} + ${s[5]} = ${ans}.`}
+  const last=s[s.length-1],prev=s[s.length-2];
+  return Object.assign({q:`Quel nombre complète la série ?${ser(s)}`,ex},numOpts(ans,[last+(last-prev),ans+1,ans-1,ans+2,ans-2,ans+(last-prev)]));
+};
+const PRIMES=[2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113];
+G['logi-remarquables']=()=>{
+  const t=pick(['sq','cube','prime','nn1']);let s=[],ans,ex;
+  if(t==='sq'){const b=R(2,8),k=pick([-2,-1,0,1,2,3]);for(let i=0;i<5;i++)s.push((b+i)**2+k);ans=(b+5)**2+k;const kt=k?` ${k>0?'+':'−'} ${Math.abs(k)}`:'';ex=`Ce sont des carrés${k?(k>0?' plus '+k:' moins '+(-k)):''} : ${b}²${kt}, ${b+1}²${kt}… Suivant : ${b+5}²${kt} = ${ans}.`}
+  else if(t==='cube'){const b=R(1,3);for(let i=0;i<4;i++)s.push((b+i)**3);ans=(b+4)**3;ex=`Ce sont des cubes : ${b}³, ${b+1}³… Suivant : ${b+4}³ = ${ans}.`}
+  else if(t==='prime'){const st=R(1,14);const step=pick([1,1,2]);for(let i=0;i<5;i++)s.push(PRIMES[st+i*step]);ans=PRIMES[st+5*step];ex=step===1?`Ce sont les nombres premiers qui se suivent. Après ${s[4]} vient ${ans}.`:`Nombres premiers, un sur deux : après ${s[4]}, on saute ${PRIMES[st+4*step+1]} et on prend ${ans}.`}
+  else {const b=R(1,5);for(let i=0;i<5;i++)s.push((b+i)*(b+i+1));ans=(b+5)*(b+6);ex=`Produits de deux entiers consécutifs : ${b} × ${b+1}, ${b+1} × ${b+2}… Suivant : ${b+5} × ${b+6} = ${ans}.`}
+  const last=s[s.length-1],prev=s[s.length-2];
+  return Object.assign({q:`Quel nombre complète la série ?${ser(s)}`,ex},numOpts(ans,[last+(last-prev),ans+1,ans-1,ans+2,ans-2]));
+};
+G['logi-lettres']=()=>{
+  const t=pick(['arith','gap','dbl','alt']);let r=[],ans,ex;
+  if(t==='arith'){const d=pick([2,3,4,5,-2,-3]);const a=d>0?R(1,14):R(14,26);for(let i=0;i<5;i++)r.push(a+i*d);ans=a+5*d;ex=`Rangs : ${r.join(', ')}. Écart de ${d>0?'+':'−'}${Math.abs(d)} : ${ans}${ans>26?`, soit ${ans} − 26 = ${ans-26}`:ans<1?`, soit ${ans} + 26 = ${ans+26}`:''} : ${LET(ans)}.`}
+  else if(t==='gap'){const a=R(1,6);let v=a,g=1;for(let i=0;i<5;i++){r.push(v);v+=g;g++}ans=v;ex=`Rangs : ${r.join(', ')}. Écarts 1, 2, 3, 4 : le suivant est 5. ${r[4]} + 5 = ${ans}${ans>26?`, soit ${ans-26}`:''} : ${LET(ans)}.`}
+  else if(t==='dbl'){const a=pick([1,2]);for(let i=0;i<4;i++)r.push(a*2**i);ans=a*16;ex=`Rangs : ${r.join(', ')}. Chaque rang double : ${ans}${ans>26?`, soit ${ans} − 26 = ${ans-26}`:''} : ${LET(ans)}.`}
+  else {const a=R(1,8),b=R(10,20),d1=pick([2,3]),d2=pick([1,2]);for(let i=0;i<6;i++)r.push(i%2===0?a+(i/2)*d1:b+((i-1)/2)*d2);ans=a+3*d1;ex=`Deux séries mêlées. Positions impaires : ${r.filter((x,i)=>i%2===0).join(', ')} (écart ${d1}). Positions paires : ${r.filter((x,i)=>i%2===1).join(', ')}. Le suivant appartient à la première : ${ans} : ${LET(ans)}.`}
+  const A=LET(ans);const cands=[LET(ans+1),LET(ans-1),LET(ans+2),LET(ans-2),LET(r[r.length-1]+1)];
+  return Object.assign({q:`Quelle lettre complète la série ?${ser(r,LET)}`,ex},strOpts(A,cands));
+};
+G['logi-grilles']=()=>{
+  const t=pick(['rowstep','rowsum','colsum','colprod','rowmul']);let g=[],rule;
+  if(t==='rowstep'){for(let i=0;i<3;i++){const a=R(1,9),s=R(2,7);g.push([a,a+s,a+2*s])}rule='chaque ligne progresse avec un écart constant, propre à la ligne'}
+  else if(t==='rowsum'){const S=R(12,24);for(let i=0;i<3;i++){let x,y;do{x=R(1,S-2);y=R(1,S-2)}while(S-x-y<1);g.push(shuffle([x,y,S-x-y]))}rule=`chaque ligne a la même somme, ${S}`}
+  else if(t==='colsum'){for(let i=0;i<3;i++){const a=R(2,15),b=R(2,15);g.push([a,b,a+b])}rule='la 3e colonne est la somme des deux premières'}
+  else if(t==='colprod'){for(let i=0;i<3;i++){const a=R(2,9),b=R(2,9);g.push([a,b,a*b])}rule='la 3e colonne est le produit des deux premières'}
+  else {const k=pick([2,3]);for(let i=0;i<3;i++){const a=R(1,6);g.push([a,a*k,a*k*k])}rule=`dans chaque ligne, on multiplie par ${k}`}
+  const r=R(0,2),c=R(0,2),ans=g[r][c];g[r][c]='?';
+  const others=g.flat().filter(x=>x!=='?');
+  return Object.assign({q:'Quelle est la case manquante ?',grid:g,ex:`Règle : ${rule}. Appliquée à la ligne ${r+1}, la case manquante vaut ${ans}.`},numOpts(ans,[ans+1,ans-1,ans+2,ans-2,...others.slice(0,3)]));
+};
+
+function genQ(cid){return G[cid]()}
+function recogQ(pool){const c=pick(pool);const q=G[c.id]();const calc=CONCEPTS.filter(x=>x.sub==='calc');const others=shuffle(calc.filter(x=>x.id!==c.id)).slice(0,4).map(x=>x.title);const o=strOpts(c.title,others);return {q:q.q,grid:q.grid,opts:o.opts,a:o.a,ex:`C’est un problème de ${c.title.toLowerCase()}. Reconnaître le type de question, c’est déjà savoir quelle méthode appliquer.`,cid:c.id}}
+
+/* ============ Réflexes (réponse tapée, chronométrée) ============ */
+const REF={
+  mult:()=>{const t=pick(['x25','x11','n5','x5','x9']);let a,q,ans;if(t==='x25'){a=R(12,48);q=`${a} × 25`;ans=a*25}else if(t==='x11'){a=R(12,98);q=`${a} × 11`;ans=a*11}else if(t==='n5'){const n=R(1,9);a=n*10+5;q=`${a}²`;ans=a*a}else if(t==='x5'){a=R(14,98)*2+1;q=`${a} × 5`;ans=a*5}else{a=R(12,49);q=`${a} × 9`;ans=a*9}return {q,ans:fr(ans),mode:'decimal'}},
+  frac:()=>{const [f,v]=pick([['1/8','0,125'],['3/8','0,375'],['5/8','0,625'],['7/8','0,875'],['1/4','0,25'],['3/4','0,75'],['1/5','0,2'],['2/5','0,4'],['3/5','0,6'],['4/5','0,8'],['1/20','0,05'],['3/20','0,15'],['1/25','0,04'],['1/40','0,025'],['3/25','0,12']]);return {q:`${f} = ?`,ans:v,mode:'decimal'}},
+  pct:()=>{const p=pick([5,10,15,20,25,30,40,75]),n=20*R(2,25);return {q:`${p} % de ${n}`,ans:fr(p*n/100),mode:'decimal'}},
+  carres:()=>{const t=pick(['sq','sq','cube','pow']);if(t==='sq'){const n=R(11,25);return {q:`${n}²`,ans:fr(n*n),mode:'decimal'}}if(t==='cube'){const n=R(2,10);return {q:`${n}³`,ans:fr(n**3),mode:'decimal'}}const n=R(5,10);return {q:`2<sup>${n}</sup>`,ans:fr(2**n),mode:'decimal'}},
+  lettres:()=>{const n=R(1,26);return Math.random()<.5?{q:`Rang de ${LET(n)} ?`,ans:String(n),mode:'decimal'}:{q:`Lettre n° ${n} ?`,ans:LET(n),mode:'text'}}
+};
+const norm=s=>String(s).trim().toUpperCase().replace(/[\s\u202f\u00a0]/g,'').replace(/\./g,',').replace(/^,/,'0,').replace(/−/g,'-');
+/* ============ Sauvegarde locale ============ */
+const KEY='tm-ml-v1',SKEY='tm-ml-ses';
+let storageOK=true;
+function blank(){return {v:1,cards:{},studied:{},newLog:{},reviews:[],sprints:[],sessions:[],book:[],errs:[],settings:{newPerDay:2,len:30,theme:'auto'},intro:false}}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);const b=blank();return Object.assign(b,o,{settings:Object.assign(b.settings,o.settings||{})})}}catch(e){storageOK=false}return blank()}
+let S=load();
+function trimS(){if(S.reviews.length>1600)S.reviews=S.reviews.slice(-1200);if(S.sprints.length>150)S.sprints=S.sprints.slice(-120);if(S.sessions.length>400)S.sessions=S.sessions.slice(-300)}
+function saveLocal(){try{localStorage.setItem(KEY,JSON.stringify(S));storageOK=true}catch(e){storageOK=false}}
+function save(){trimS();S.updated=Date.now();saveLocal();schedulePush()}
+
+/* ============ Synchronisation entre appareils (Firebase) ============ */
+/* Colle ici la configuration de ton projet Firebase (étape 1 du guide).
+   Tant qu’elle reste à null, l’app fonctionne en local sur chaque appareil. */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBi2AePhYDRm-4D16jmrnxTrTS3scRms2k",
+  authDomain: "tagemagelouisot.firebaseapp.com",
+  projectId: "tagemagelouisot",
+  storageBucket: "tagemagelouisot.firebasestorage.app",
+  messagingSenderId: "163488262165",
+  appId: "1:163488262165:web:73fc558324c0cdc9e5861c"
+};
+
+const SYNC={state:'local',ref:null,timer:null,pending:null,key:null};
+function readKey(){const m=(location.hash||'').match(/k=([a-f0-9]{32,64})/);if(m){try{localStorage.setItem('tm-key',m[1])}catch(e){}return m[1]}try{return localStorage.getItem('tm-key')}catch(e){return null}}
+function personalLink(){return SYNC.key?location.origin+location.pathname+'#k='+SYNC.key:''}
+function newKey(){const a=new Uint8Array(20);crypto.getRandomValues(a);return Array.from(a,x=>x.toString(16).padStart(2,'0')).join('')}
+function loadScript(src){return new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.head.appendChild(s)})}
+function schedulePush(){if(!SYNC.ref)return;clearTimeout(SYNC.timer);SYNC.timer=setTimeout(pushNow,1500)}
+function pushNow(){if(!SYNC.ref)return;clearTimeout(SYNC.timer);
+  SYNC.ref.set({json:JSON.stringify(S),updated:S.updated||Date.now()}).then(()=>{if(SYNC.state!=='sync'){SYNC.state='sync';if(typeof render==='function'&&!SES)render()}}).catch(()=>{SYNC.state='error';setTimeout(pushNow,8000)})}
+function adopt(r){const b=blank();S=Object.assign(b,r,{settings:Object.assign(b.settings,r.settings||{})});buildDefs();saveLocal();if(typeof applyTheme==='function')applyTheme()}
+function parseRemote(snap){try{const d=snap&&snap.exists?snap.data():null;return d&&typeof d.json==='string'?JSON.parse(d.json):null}catch(e){return null}}
+async function initSync(){
+  SYNC.key=readKey();
+  if(!FIREBASE_CONFIG){SYNC.state='noconfig';return}
+  if(!SYNC.key){SYNC.state='nokey';render();return}
+  if(!/k=/.test(location.hash))history.replaceState(null,'',location.pathname+location.search+'#k='+SYNC.key);
+  try{
+    SYNC.state='connecting';render();
+    if(!window.firebase){await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');await loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js')}
+    const app=firebase.apps.length?firebase.app():firebase.initializeApp(FIREBASE_CONFIG);
+    SYNC.ref=app.firestore().collection('progress').doc(SYNC.key);
+    const r=parseRemote(await SYNC.ref.get());
+    if(r&&(r.updated||0)>(S.updated||0)){adopt(r);SYNC.state='sync'}
+    else if(S.updated||Object.keys(S.cards).length)pushNow();
+    else SYNC.state='sync';
+    SYNC.ref.onSnapshot(snap=>{if(snap.metadata&&snap.metadata.hasPendingWrites)return;const r2=parseRemote(snap);if(!r2||(r2.updated||0)<=(S.updated||0))return;if(SES){SYNC.pending=r2}else{adopt(r2);render()}},()=>{SYNC.state='error';render()});
+    if(!SES)render();
+  }catch(e){SYNC.state='error';render()}
+}
+function createSpace(){SYNC.key=newKey();try{localStorage.setItem('tm-key',SYNC.key)}catch(e){}history.replaceState(null,'',location.pathname+location.search+'#k='+SYNC.key);initSync()}
+function applyPending(){if(SYNC.pending&&(SYNC.pending.updated||0)>(S.updated||0))adopt(SYNC.pending);SYNC.pending=null}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')pushNow()});
+let SES=null;
+function saveSes(){try{if(SES)localStorage.setItem(SKEY,JSON.stringify(SES));else localStorage.removeItem(SKEY)}catch(e){}}
+function loadSes(){try{const r=localStorage.getItem(SKEY);if(r){const o=JSON.parse(r);if(Date.now()-o.start<8*3600e3)return o;localStorage.removeItem(SKEY)}}catch(e){}return null}
+const dayKey=(t=Date.now())=>{const d=new Date(t);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()};
+const newToday=()=>S.newLog[dayKey()]||0;
+
+/* ============ Répétition espacée (inspirée de FSRS, l’algorithme d’Anki) ============ */
+const DAY=864e5,MIN=6e4;
+const initS=g=>[0,0.02,0.25,1,3][g];
+const initD=g=>[0,7,6,5,3.5][g];
+const retr=(t,s)=>Math.pow(1+t/(9*s),-1);
+function nextState(st,g,now=Date.now()){
+  st=st||{};let s,d,lapses=st.lapses||0;
+  if(!st.reps){s=initS(g);d=initD(g)}
+  else{const t=Math.max(0,(now-st.last)/DAY);const r=retr(t,st.s);d=st.d-0.6*(g-3);d=Math.min(10,Math.max(1,0.9*d+0.5));
+    if(g===1){s=Math.max(0.02,st.s*0.2);lapses++}
+    else{const inc=Math.exp(1.5)*(11-d)*Math.pow(st.s,-0.15)*(Math.exp(1-r)-1)*(g===2?0.4:1)*(g===4?2:1);s=st.s*(1+Math.max(inc,0.05))}}
+  let iv=g===1?20*MIN:Math.min(s,180)*DAY;if(g!==1&&s>2)iv*=0.95+Math.random()*0.1;
+  return {s,d,due:now+iv,last:now,reps:(st.reps||0)+1,lapses,leech:g===1&&lapses>=4};
+}
+function fmtIv(ms){const m=ms/MIN;if(m<60)return Math.max(1,Math.round(m))+' min';const h=m/60;if(h<24)return Math.round(h)+' h';const d=h/24;if(d<31)return Math.round(d)+' j';return Math.round(d/30)+' mois'}
+function preview(id,g){const n=nextState(S.cards[id],g);return fmtIv(n.due-Date.now())}
+
+let DEFS={};
+function buildDefs(){const out={};for(const c of CONCEPTS){c.cartes.forEach((x,i)=>out[`${c.id}:r${i}`]={type:'r',cid:c.id,sub:c.sub,f:x[0],b:x[1]});out[`${c.id}:p`]={type:'p',cid:c.id,sub:c.sub};if(c.skill)out['ref:'+c.skill]={type:'ref',cid:c.id,sub:c.sub,skill:c.skill}}out['recog:calc']={type:'recog',sub:'calc'};for(const e of S.errs)out[e.id]={type:'err',cid:e.cid,sub:e.sub,err:e};DEFS=out}
+buildDefs();
+function schedule(id,g,extra){const def=DEFS[id];const prev=S.cards[id];const had=!!(prev&&prev.reps);const n=nextState(prev,g);S.cards[id]=n;S.reviews.push(Object.assign({t:Date.now(),id,g,type:def?def.type:'?',sub:def?def.sub:'',rev:had},extra||{}));return n}
+function dueList(now=Date.now()){return Object.entries(S.cards).filter(([id,st])=>st.due<=now&&DEFS[id]&&DEFS[id].type!=='ref').sort((a,b)=>a[1].due-b[1].due).map(x=>x[0])}
+function dueCount(){return dueList().length}
+function studiedList(sub){return CONCEPTS.filter(c=>S.studied[c.id]&&(!sub||c.sub===sub))}
+function introduceConcept(cid,score){
+  const now=Date.now();if(S.studied[cid])return;S.studied[cid]=now;S.newLog[dayKey()]=newToday()+1;
+  const c=CBYID[cid];c.cartes.forEach((x,i)=>{S.cards[`${cid}:r${i}`]={reps:0,due:now+30*MIN}});
+  S.cards[`${cid}:p`]=nextState(null,score>=3?3:score>=2?2:1,now);
+  if(c.skill&&!S.cards['ref:'+c.skill])S.cards['ref:'+c.skill]={reps:0,due:now};
+  if(studiedList('calc').length>=3&&!S.cards['recog:calc'])S.cards['recog:calc']={reps:0,due:now+60*MIN};
+  save();
+}
+function mastery(cid){
+  if(!S.studied[cid])return 0;
+  const ss=Object.keys(DEFS).filter(id=>DEFS[id].cid===cid&&(DEFS[id].type==='r'||DEFS[id].type==='p')).map(id=>S.cards[id]).filter(Boolean);
+  if(!ss.length)return 1;const min=Math.min(...ss.map(x=>x.reps?x.s:0));
+  if(min>=21)return 4;if(min>=7)return 3;return ss.every(x=>x.reps)?2:1;
+}
+function nextConcept(exclude){
+  const avail=CONCEPTS.filter(c=>!S.studied[c.id]&&c.id!==(exclude&&exclude.id)&&(c.pre||[]).every(p=>S.studied[p]));if(!avail.length)return null;
+  const cnt=sub=>studiedList(sub).length+(exclude&&exclude.sub===sub?1:0);avail.sort((a,b)=>cnt(a.sub)-cnt(b.sub)||CONCEPTS.indexOf(a)-CONCEPTS.indexOf(b));return avail[0];
+}
+const EST={r:14,p:75,recog:15,err:120,ref:0};
+function est(type){const xs=S.reviews.filter(r=>r.type===type&&r.ms).slice(-30).map(r=>r.ms/1000);if(xs.length>=5){const m=xs.reduce((a,b)=>a+b,0)/xs.length;return Math.min(Math.max(m,8),200)+3}return EST[type]||30}
+function weightedConcepts(list,n){const out=[];let last=null;for(let i=0;i<n;i++){const pool=list.filter(c=>c.id!==last);const src=pool.length?pool:list;const w=src.map(c=>5-Math.min(mastery(c.id),4));const tot=w.reduce((a,b)=>a+b,0);let x=Math.random()*tot,k=0;for(;k<src.length-1;k++){x-=w[k];if(x<=0)break}out.push(src[k]);last=src[k].id}return out}
+function stepFor(id){const d=DEFS[id];if(d.type==='p')return {k:'prob',id,cid:d.cid};if(d.type==='recog')return {k:'recog',id};return {k:'card',id}}
+function lastSessionSprint(){const t=S.sessions.filter(s=>s.kind==='daily');return t.length?!!t[t.length-1].sprint:false}
+
+function buildDaily(mins,dry){
+  const now=Date.now(),steps=[];let budget=mins*60;
+  const studied=studiedList();const skills=studied.filter(c=>c.skill);
+  const full=mins>=20;
+  if(full&&skills.length){steps.push({k:'warm',dur:180});budget-=180}
+  const nc=(full&&newToday()<S.settings.newPerDay)?nextConcept():null;
+  const nc2=(nc&&!studied.length&&newToday()+1<S.settings.newPerDay)?nextConcept(nc):null;
+  const doSprint=full&&studied.length>=2&&!lastSessionSprint();
+  const revBudget=full?budget-(nc?600:0)-(doSprint?420:0):budget;
+  const due=dueList(now);const by={calc:[],logi:[],cm:[]};due.forEach(id=>by[DEFS[id].sub].push(id));
+  const order=[];while(order.length<due.length){for(const s of ['calc','logi','cm']){const x=by[s].shift();if(x)order.push(x)}}
+  let t=0,nrev=0;for(const id of order){const e=est(DEFS[id].type);if(t+e>revBudget&&t>0)break;steps.push(stepFor(id));t+=e;nrev++}
+  const remaining=revBudget-t;
+  if(nc)steps.push({k:'concept',cid:nc.id});
+  if(nc2)steps.push({k:'concept',cid:nc2.id});
+  let nextra=0;
+  if(studied.length&&remaining>150){nextra=Math.min(full?8:6,Math.floor(remaining/est('p')));weightedConcepts(studied,nextra).forEach(c=>steps.push({k:'prob',id:c.id+':p',cid:c.id,extra:true}))}
+  if(doSprint)steps.push({k:'sprint',n:5});
+  if(!dry)steps.push({k:'bilan'});
+  return {kind:full?'daily':'short',mins,steps,i:0,start:now,log:[],sprinted:doSprint,nrev,nextra,nc:nc?nc.id:null,nc2:nc2?nc2.id:null,estSec:(steps.some(s=>s.k==='warm')?180:0)+t+(nc?600:0)+(nc2?600:0)+nextra*est('p')+(doSprint?420:0)};
+}
+function mkSes(kind,steps){return {kind,steps:steps.concat([{k:'bilan'}]),i:0,start:Date.now(),log:[]}}
+/* ============ État de l’interface ============ */
+let TAB='today',PAGE={cid:null,fs:{ex:1}},OVL=null,CURFS=null,PENDING=loadSes(),LASTKEY=null;
+const UI={scr:false,booksub:'calc',booktest:'1',sprintN:5};
+function applyTheme(){const t=S.settings.theme;if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t)}
+
+/* ============ Briques visuelles ============ */
+function casesHTML(lvl){let h='<span class="cases" aria-label="'+LEVELS[lvl]+'">';for(let i=1;i<=4;i++)h+=`<i class="${i<=lvl?'f':''}"></i>`;return h+'</span>'}
+function gridHTML(g){return `<div class="gridq">${g.flat().map(x=>`<span class="${x==='?'?'q':''}">${x}</span>`).join('')}</div>`}
+function stemHTML(q){return `<div class="stem">${q.q}</div>${q.grid?gridHTML(q.grid):''}${q.i1?`<div class="infos"><p><b>(1)</b> ${q.i1}</p><p><b>(2)</b> ${q.i2}</p></div>`:''}`}
+function optsHTML(q,sel,phase,act){return `<div class="opts">${q.opts.map((o,i)=>{let c='';if(phase==='fb'){c=i===q.a?'good':i===sel?'bad':'dim'}else if(i===sel)c='sel';return `<button class="opt ${c}" data-a="${act}" data-i="${i}" ${phase==='fb'?'disabled':''}><span class="bub">${L5[i]}</span><span>${o}</span></button>`}).join('')}</div>`}
+function scratchHTML(key){if(SCR.key!==key)SCR={key,strokes:[]};return `<button class="btn sm scr-toggle" data-a="scrToggle">${UI.scr?'Masquer le brouillon':'Ouvrir le brouillon'}</button><div class="scr-wrap ${UI.scr?'open':''}"><div class="scr-head"><span class="small muted">Brouillon</span><button class="link" data-a="scrClear">Effacer</button></div><canvas id="scr" aria-label="Brouillon"></canvas></div>`}
+let SCR={key:null,strokes:[]};
+function initScratch(){const cv=$('#scr');if(!cv)return;const r=cv.getBoundingClientRect();if(!r.width)return;const dpr=window.devicePixelRatio||1;cv.width=r.width*dpr;cv.height=r.height*dpr;const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);ctx.lineCap='round';ctx.lineJoin='round';ctx.lineWidth=2.2;ctx.strokeStyle=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#1B2233';
+  const draw=s=>{ctx.beginPath();s.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));if(s.length===1)ctx.lineTo(s[0][0]+.1,s[0][1]);ctx.stroke()};SCR.strokes.forEach(draw);
+  let cur=null;const pos=e=>{const b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
+  cv.onpointerdown=e=>{e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}cur=[pos(e)];SCR.strokes.push(cur);draw(cur)};
+  cv.onpointermove=e=>{if(!cur)return;const p=pos(e);const q=cur[cur.length-1];cur.push(p);ctx.beginPath();ctx.moveTo(q[0],q[1]);ctx.lineTo(p[0],p[1]);ctx.stroke()};
+  cv.onpointerup=cv.onpointercancel=()=>{cur=null}}
+
+/* ============ Fiche de cours ============ */
+function ficheHTML(c,fs){
+  CURFS=fs;const ex=c.ex,tr=c.trou;const shown=fs.ex||1;
+  let h=`<div class="fsec"><h3>L’idée</h3><p>${c.intuition}</p></div>`;
+  h+=`<div class="fsec"><h3>La règle</h3><div class="box">${c.regle}</div></div>`;
+  h+=`<div class="fsec"><h3>Exemple résolu</h3><p class="stem">${ex.enonce}</p>${ex.grid?gridHTML(ex.grid):''}<ol class="wsteps">${ex.steps.slice(0,shown).map(s=>`<li>${s}</li>`).join('')}</ol>`;
+  h+=shown<ex.steps.length?`<p class="small muted">Avant d’afficher l’étape suivante, essaie de la deviner.</p><button class="btn sm" data-a="exNext">Afficher l’étape ${shown+1}</button>`:'';
+  h+='</div>';
+  h+=`<div class="fsec"><h3>À toi de compléter</h3><p class="stem">${tr.enonce}</p>${tr.grid?gridHTML(tr.grid):''}<ol class="wsteps">`;
+  tr.steps.forEach((s,i)=>{if(i<tr.blank||fs.trouOk)h+=`<li>${s}</li>`;else if(i===tr.blank){h+=`<li><div class="blank"><p class="small"><b>Quelle est cette étape ?</b></p><div class="opts" style="margin-top:8px">${(fs.order||(fs.order=shuffle(tr.choices.map((_,j)=>j)))).map((j,pos)=>`<button class="opt ${fs.trouSel===j?(j===tr.ok?'good':'bad'):''}" data-a="trou" data-i="${j}"><span class="bub">${L5[pos]}</span><span>${tr.choices[j]}</span></button>`).join('')}</div>${fs.trouSel!=null&&fs.trouSel!==tr.ok?'<p class="small ko-t" style="margin-top:8px">Pas tout à fait. Relis l’étape précédente et réessaie.</p>':''}</div></li>`}});
+  h+='</ol></div>';
+  h+=`<div class="fsec"><h3>Les pièges</h3><ul class="pit">${c.pieges.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+  h+=`<div class="fsec"><h3>Le réflexe chrono</h3><div class="box alt">${c.reflexe}</div></div>`;
+  h+=`<p class="small muted" style="margin-top:22px">Pour aller plus loin dans le livre : ${c.book}.</p>`;
+  return h;
+}
+
+/* ============ Onglets ============ */
+function tabsHTML(){return [['today','Aujourd’hui'],['cours','Cours'],['train','S’entraîner'],['prog','Progrès']].map(([k,l])=>`<button class="${TAB===k?'on':''}" data-a="tab" data-t="${k}">${l}</button>`).join('')}
+function brand(){return `<div class="brand"><span class="tag">TAGE MAGE 2026</span><span class="tag">Maths et logique</span></div>`}
+function lineup(){return `<div class="lineup"><p class="kick">Tage Mage<br>invite</p><span class="poster">Calcul</span><span class="poster s">Conditions</span><span class="poster s">minimales</span><span class="poster">Logique</span></div>`}
+
+function viewToday(){
+  let h=brand()+lineup();
+  if(!storageOK)h+=`<div class="card note" style="margin-top:10px">Ce navigateur bloque l’enregistrement : la progression sera perdue à la fermeture. Désactive la navigation privée pour garder ton historique.</div>`;
+  if(SYNC.state==='nokey')h+=`<div class="card stack" style="margin-top:12px"><p><b>Active la synchronisation</b><br><span class="small">Pour retrouver ta progression sur tous tes appareils, crée ton espace personnel.</span></p><button class="btn primary" data-a="createSpace">Créer mon espace</button></div>`;
+  if(SYNC.state==='nokey')h+=`<div class="card stack" style="margin-top:12px"><p><b>Active la synchronisation</b><br><span class="small">Pour retrouver ta progression sur tous tes appareils, crée ton espace personnel.</span></p><button class="btn primary" data-a="createSpace">Créer mon espace</button></div>`;
+  if(PENDING)h+=`<div class="card resume stack" style="margin-top:12px"><p><b>Session en cours</b><br><span class="small">Tu t’es arrêtée à l’étape ${PENDING.i+1} sur ${PENDING.steps.length}.</span></p><div class="row"><button class="btn primary" data-a="resume">Reprendre</button><button class="btn ghost" data-a="dropPending">Abandonner</button></div></div>`;
+  if(!S.intro)h+=`<div class="card stack" style="margin-top:12px"><h2 style="margin-top:0">Comment ça marche</h2><p>Chaque session dure 25 à 30 minutes. L’app compose tout : un échauffement de calcul mental, les révisions du jour, un nouveau concept, et parfois un sprint chronométré.</p><p>Ce que tu as appris revient juste avant que tu ne l’oublies, de plus en plus espacé : c’est le principe d’Anki. Tes erreurs reviennent plus vite, tes réussites s’espacent.</p><p>Plusieurs sessions par jour, c’est idéal : laisse au moins une heure entre deux.</p><button class="btn" data-a="introOk">C’est compris</button></div>`;
+  const plan=buildDaily(S.settings.len,true);const mins=Math.max(5,Math.round(plan.estSec/60));
+  const items=[];
+  if(plan.steps.some(s=>s.k==='warm'))items.push(['Échauffement de calcul mental','3 min']);
+  if(plan.nrev)items.push([`${plan.nrev} révision${plan.nrev>1?'s':''} du jour`,'']);
+  if(plan.nc)items.push([`Nouveau concept : ${CBYID[plan.nc].title}`,'10 min']);
+  if(plan.nc2)items.push([`Nouveau concept : ${CBYID[plan.nc2].title}`,'10 min']);
+  if(plan.nextra)items.push([`${plan.nextra} exercices mêlés sur tes concepts`,'']);
+  if(plan.sprinted)items.push(['Sprint chrono au barème officiel','7 min']);
+  h+=`<div class="card hero" style="margin-top:12px"><h1>${studiedList().length?'Ta session du jour':'Première session'}</h1><p class="muted">${studiedList().length?'Composée selon ce que tu dois revoir maintenant.':'On commence par un premier concept, expliqué pas à pas.'}</p>`;
+  h+=items.length?`<ol class="plan">${items.map(([a,b])=>`<li><span>${a}</span><span class="dur">${b}</span></li>`).join('')}</ol>`:'<p style="margin:16px 0">Rien à réviser pour l’instant et aucun nouveau concept aujourd’hui. Tu peux t’entraîner librement.</p>';
+  h+=`<div class="chips" style="margin-bottom:14px">${[25,30].map(n=>`<button class="chip ${S.settings.len===n?'on':''}" data-a="len" data-n="${n}">${n} min</button>`).join('')}</div>`;
+  h+=`<button class="btn primary block" data-a="startDaily" ${items.length?'':'disabled'}>Commencer (environ ${mins} min)</button>`;
+  h+=`<button class="btn ghost block" style="margin-top:10px" data-a="startShort" ${dueCount()||studiedList().length?'':'disabled'}>Je n’ai que 10 minutes</button></div>`;
+  const td=dayKey();const sesToday=S.sessions.filter(s=>dayKey(s.t)===td);const revToday=S.reviews.filter(r=>dayKey(r.t)===td).length;const minToday=Math.round(sesToday.reduce((a,s)=>a+s.d,0)/60);
+  h+=`<h2>Aujourd’hui</h2><div class="kpis"><div class="kpi"><b>${sesToday.length}</b><span>session${sesToday.length>1?'s':''}</span></div><div class="kpi"><b>${revToday}</b><span>réponses</span></div><div class="kpi"><b>${minToday}</b><span>minutes</span></div></div>`;
+  h+=`<h2>Révisions à venir</h2>${forecastHTML()}`;
+  h+=`<h2>Concepts</h2><div class="card">${SUB_ORDER.map(s=>{const all=CONCEPTS.filter(c=>c.sub===s);const st=all.filter(c=>S.studied[c.id]).length;const ms=all.filter(c=>mastery(c.id)>=3).length;return `<div class="srow2"><div class="top"><b>${SUBS[s]}</b><span class="small muted">${st} vus sur ${all.length}, ${ms} consolidés</span></div><div class="meter"><i style="width:${st/all.length*100}%"></i></div></div>`}).join('')}</div>`;
+  return h;
+}
+function forecastHTML(){const now=Date.now();const start=new Date();start.setHours(0,0,0,0);const days=[];for(let i=0;i<7;i++){const a=start.getTime()+i*DAY,b=a+DAY;const n=Object.entries(S.cards).filter(([id,st])=>DEFS[id]&&DEFS[id].type!=='ref'&&(i===0?st.due<b:st.due>=a&&st.due<b)).length;days.push(n)}const mx=Math.max(1,...days);const names=['Auj.','Dem.'];for(let i=2;i<7;i++)names.push(new Date(start.getTime()+i*DAY).toLocaleDateString('fr-FR',{weekday:'short'}).replace('.',''));
+  return `<div class="card"><div class="bars">${days.map((n,i)=>`<div><strong>${n}</strong><i style="height:${Math.max(3,n/mx*70)}px"></i><em>${names[i]}</em></div>`).join('')}</div></div>`}
+
+function viewCours(){
+  if(PAGE.cid)return viewConcept(PAGE.cid);
+  let h=brand()+`<h1>Cours</h1><p class="muted">Chaque concept a sa fiche : l’idée, la règle, un exemple résolu, les pièges. Le suivant se débloque quand ses prérequis sont vus, mais tu peux ouvrir n’importe quelle fiche.</p>`;
+  for(const s of SUB_ORDER){h+=`<div class="subhead">${SUBS[s].split(' ').map(w=>`<span class="poster" style="display:block">${w}</span>`).join('')}</div><div class="card" style="padding:6px 16px">`;let bloc=null;const list=CONCEPTS.filter(c=>c.sub===s);h+='<ul class="clist">';
+    for(const c of list){if(c.bloc!==bloc){if(bloc!==null)h+='</ul><ul class="clist">';h+=`<li class="bloc" style="border:0">${c.bloc}</li>`;bloc=c.bloc}const m=mastery(c.id);h+=`<li><button class="crow" data-a="openC" data-cid="${c.id}"><span class="t"><b>${c.title}</b><span>${LEVELS[m]}</span></span>${casesHTML(m)}</button></li>`}
+    h+='</ul></div>'}
+  return h;
+}
+function viewConcept(cid){
+  const c=CBYID[cid];const m=mastery(cid);const missing=(c.pre||[]).filter(p=>!S.studied[p]);
+  let h=`<div class="topbar"><button class="icon" data-a="closeC" aria-label="Retour">‹</button><div class="tb-mid"><div class="tb-label">${SUBS[c.sub]}, ${c.bloc.toLowerCase()}</div></div></div>`;
+  h+=`<h1>${c.title}</h1><p>${casesHTML(m)} <span class="small muted" style="margin-left:6px">${LEVELS[m]}</span></p>`;
+  if(missing.length)h+=`<p class="note">Conseillé avant : ${missing.map(p=>CBYID[p].title).join(', ')}.</p>`;
+  h+=`<div class="row" style="margin-top:14px">${S.studied[cid]?'':`<button class="btn primary" data-a="learnC" data-cid="${cid}">Apprendre ce concept</button>`}<button class="btn" data-a="practiceC" data-cid="${cid}">S’entraîner (6 variantes)</button></div>`;
+  h+=ficheHTML(c,PAGE.fs);
+  h+=`<details style="margin-top:22px"><summary>Les cartes de rappel (${c.cartes.length})</summary><div class="stack" style="margin-top:8px">${c.cartes.map(x=>`<div class="card"><b>${x[0]}</b><p class="small" style="margin:6px 0 0">${x[1]}</p></div>`).join('')}</div></details>`;
+  return h;
+}
+function viewTrain(){
+  const st=studiedList();let h=brand()+`<h1>S’entraîner</h1><p class="muted">En dehors des sessions, pour travailler un point précis. Ces exercices ne dérèglent pas tes révisions : une erreur fait simplement revenir le concept plus tôt.</p>`;
+  h+=`<h2>Réflexes de calcul</h2><div class="card stack"><p>Deux minutes de calcul mental, de fractions, de carrés et de rangs de lettres, réponse tapée.</p><button class="btn block" data-a="startWarm">Lancer 2 minutes</button></div>`;
+  h+=`<h2>Sprint chrono</h2><div class="card stack"><p>Questions mêlées sur les concepts déjà vus, 80 secondes par question, barème officiel : +4, −1, 0 si tu passes.</p><div class="chips">${[5,10,15].map(n=>`<button class="chip ${UI.sprintN===n?'on':''}" data-a="sprintN" data-n="${n}">${n} questions</button>`).join('')}</div><button class="btn block primary" data-a="startSprint" ${st.length?'':'disabled'}>Lancer le sprint</button>${st.length?'':'<p class="small muted">Disponible après ton premier concept.</p>'}</div>`;
+  h+=`<h2>Par sous-test</h2><div class="card stack"><p>8 exercices corrigés, mélangés entre les concepts vus du sous-test.</p><div class="row">${SUB_ORDER.map(s=>`<button class="btn" data-a="practiceSub" data-s="${s}" ${studiedList(s).length?'':'disabled'}>${SUBS[s]}</button>`).join('')}</div></div>`;
+  h+=`<h2>Test du livre</h2><div class="card stack"><p>Fais un sous-test du livre avec la feuille de réponse et le chrono de l’app. Tu saisis ensuite le corrigé : l’app calcule ton score et transforme tes erreurs en révisions.</p>`;
+  h+=`<div class="chips">${SUB_ORDER.map(s=>`<button class="chip ${UI.booksub===s?'on':''}" data-a="bookSub" data-s="${s}">${SUBS[s]}</button>`).join('')}</div>`;
+  h+=`<label class="small" style="display:block">Quel test ?<br><select data-ch="bookTest">${Array.from({length:18},(_,i)=>i+1).map(n=>`<option value="${n}" ${String(n)===UI.booktest?'selected':''}>${n<=3?`Mini-test n° ${n} du chapitre`:`Test blanc n° ${n}`}${bookPage(UI.booksub,n)?` (p. ${bookPage(UI.booksub,n)})`:''}</option>`).join('')}</select></label>`;
+  h+=`<button class="btn block" data-a="startBook">Préparer la feuille de réponse</button></div>`;
+  if(S.errs.length)h+=`<p class="small muted" style="margin-top:12px">${S.errs.length} erreur${S.errs.length>1?'s':''} du livre sont dans tes révisions.</p>`;
+  return h;
+}
+function bookPage(sub,n){n=+n;return n<=3?BOOKP[sub][n]:BOOKP.blanc[n]||null}
+
+function viewProg(){
+  let h=brand()+`<h1>Progrès</h1>`+`<div class="syncline ${SYNC.state==='sync'?'':'off'}" style="margin-bottom:6px"><i></i>${SYNC.state==='sync'?'Synchronisé sur tous tes appareils':SYNC.state==='connecting'?'Connexion en cours…':'Enregistré sur cet appareil uniquement'}</div>`;
+  h+=`<h2>Score estimé par sous-test</h2><div class="card">`;
+  for(const s of SUB_ORDER){const res=S.sprints.flatMap(x=>x.res.filter(r=>r.sub===s)).slice(-30);const books=S.book.filter(b=>b.sub===s);const lb=books[books.length-1];
+    let est=null;if(res.length>=5){const pts=res.reduce((a,r)=>a+(r.r==='ok'?4:r.r==='ko'?-1:0),0)/res.length;est=Math.round(pts*15)}
+    h+=`<div class="srow2"><div class="top"><b>${SUBS[s]}</b><span class="mono" style="font-size:20px">${est!=null?est+' / 60':'?'}</span></div><div class="meter"><i style="width:${Math.max(0,(est||0))/60*100}%"></i></div><p class="small muted" style="margin:6px 0 0">${est!=null?`D’après tes ${res.length} dernières réponses en sprint.`:'Estimation disponible après 5 réponses en sprint.'}${lb?` Dernier test du livre : ${lb.score} / 60.`:''}</p></div>`}
+  h+='</div>';
+  const now=Date.now();const rv=S.reviews.filter(r=>r.rev&&now-r.t<30*DAY&&r.type!=='ref');const ret=rv.length?Math.round(rv.filter(r=>r.g>1).length/rv.length*100):null;
+  const tms=S.reviews.filter(r=>r.type==='p'&&r.ms).slice(-40).map(r=>r.ms/1000).concat(S.sprints.slice(-6).flatMap(x=>x.res.filter(r=>r.ms).map(r=>r.ms/1000)));const tavg=tms.length?Math.round(tms.reduce((a,b)=>a+b,0)/tms.length):null;
+  h+=`<h2>Mémoire et rythme</h2><div class="kpis"><div class="kpi"><b>${ret!=null?ret+' %':'?'}</b><span>rétention sur 30 jours</span></div><div class="kpi"><b>${tavg!=null?tavg+' s':'?'}</b><span>par question (cible 80 s)</span></div><div class="kpi"><b>${S.reviews.length}</b><span>réponses au total</span></div></div>`;
+  h+=`<p class="small muted" style="margin-top:8px">La rétention mesure la part des révisions réussies. Autour de 85 à 90 %, l’espacement est bien réglé.</p>`;
+  const cf={sure:[],mid:[],guess:[]};S.reviews.filter(r=>r.conf&&cf[r.conf]).slice(-200).forEach(r=>cf[r.conf].push(r.ok?1:0));
+  const pc=a=>a.length?Math.round(a.reduce((x,y)=>x+y,0)/a.length*100)+' %':'?';
+  h+=`<h2>Fiabilité de ta confiance</h2><div class="card"><p class="small muted">Quand tu dis être sûre, tu devrais avoir juste presque toujours. Si ce n’est pas le cas, prends l’habitude de vérifier avant de répondre.</p><div class="kpis"><div class="kpi"><b>${pc(cf.sure)}</b><span>justes quand « sûre »</span></div><div class="kpi"><b>${pc(cf.mid)}</b><span>quand « j’hésite »</span></div><div class="kpi"><b>${pc(cf.guess)}</b><span>« au hasard »</span></div></div></div>`;
+  if(S.book.length){const causes={};S.errs.forEach(e=>{causes[e.cause]=(causes[e.cause]||0)+1});h+=`<h2>Tests du livre</h2><div class="card">${S.book.slice(-8).reverse().map(b=>`<div class="srow2"><div class="top"><span>${SUBS[b.sub]}, ${b.test<=3?'mini-test':'test blanc'} n° ${b.test}</span><b class="mono">${b.score} / 60</b></div><p class="small muted" style="margin:4px 0 0">${new Date(b.t).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})} : ${b.ok} justes, ${b.ko} fausses, ${b.skip} passées</p></div>`).join('')}</div>`;
+    if(Object.keys(causes).length)h+=`<p class="small" style="margin-top:10px">Causes de tes erreurs : ${Object.entries(causes).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`${k.toLowerCase()} (${v})`).join(', ')}.</p>`}
+  h+=`<h2>Réglages</h2><div class="card stack"><p><b>Nouveaux concepts par jour</b><br><span class="small muted">Au-delà de 2, les révisions s’accumulent vite.</span></p><div class="chips">${[1,2,3].map(n=>`<button class="chip ${S.settings.newPerDay===n?'on':''}" data-a="setNew" data-n="${n}">${n}</button>`).join('')}</div><p><b>Apparence</b></p><div class="chips">${[['auto','Automatique'],['light','Clair'],['dark','Sombre']].map(([k,l])=>`<button class="chip ${S.settings.theme===k?'on':''}" data-a="setTheme" data-t="${k}">${l}</button>`).join('')}</div></div>`;
+  h+=`<h2>Synchronisation</h2><div class="card stack">${syncHTML()}</div>`;
+  h+=`<h2>Sauvegarde</h2><div class="card stack"><p class="small">Le code de sauvegarde contient toute ta progression. Garde-le de côté de temps en temps (dans tes notes, par exemple) : il permet de tout restaurer.</p><div class="row"><button class="btn" data-a="exportS">Copier le code de sauvegarde</button><button class="btn" data-a="importS">Restaurer</button></div><textarea id="bk" placeholder="Colle ici un code de sauvegarde, puis touche Restaurer."></textarea><button class="link" data-a="resetAll">Tout effacer</button></div>`;
+  h+=`<details style="margin-top:22px"><summary>Sur quoi repose la méthode</summary><div class="stack small" style="margin-top:8px"><p><b>Se tester plutôt que relire.</b> Chercher une réponse en mémoire la consolide bien plus qu’une relecture (Roediger et Karpicke, 2006 ; Dunlosky et al., 2013).</p><p><b>La répétition espacée.</b> Chaque carte revient juste avant l’oubli probable, avec une rétention visée d’environ 90 %, sur le modèle de FSRS, l’algorithme d’Anki.</p><p><b>Une carte, une compétence.</b> Les exercices changent de nombres à chaque passage : tu révises la méthode, pas une réponse apprise par cœur.</p><p><b>Le mélange.</b> Alterner les types de problèmes apprend à les reconnaître (Rohrer et Taylor, 2007).</p><p><b>Exemples résolus puis à compléter</b> (Sweller, Renkl), et questions avant la fiche : se tromper avant d’apprendre aide à retenir la correction (Richland, Kornell et Kao, 2009).</p><p><b>La confiance.</b> Une erreur commise avec assurance, une fois corrigée, se retient particulièrement bien (Butterfield et Metcalfe, 2001).</p></div></details>`;
+  return h;
+}
+
+/* ============ Session ============ */
+function blockLabel(st){if(!st)return '';const d=DEFS[st.id];return {warm:'Réflexes',card:d&&d.type==='err'?'Erreur du livre à revoir':'Révision',prob:st.extra?'Exercice mêlé':'Révision',recog:'Reconnaître la méthode',concept:'Nouveau concept',sprint:'Sprint chrono',book:'Test du livre',bilan:'Bilan'}[st.k]}
+function clockInfo(){if(!SES)return {t:'',w:false};const st=SES.steps[SES.i];const mm=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  if(st&&st.k==='sprint'&&st.phase==='run'){const r=(st.dur-(Date.now()-st.start))/1000;return {t:mm(r),w:r<60}}
+  if(st&&st.k==='book'&&st.phase==='run'){const r=(st.dur-(Date.now()-st.start))/1000;return {t:mm(r),w:r<120}}
+  if(st&&st.k==='warm'&&st.start){const r=st.dur-(Date.now()-st.start)/1000;return {t:mm(r),w:r<15}}
+  return {t:mm((Date.now()-SES.start)/1000),w:false}}
+function viewSession(){
+  const st=SES.steps[SES.i];const ci=clockInfo();const pct=Math.round(SES.i/Math.max(1,SES.steps.length-1)*100);
+  let h=`<div class="topbar"><button class="icon" data-a="quit" aria-label="Quitter la session">✕</button><div class="tb-mid"><div class="tb-label">${blockLabel(st)}</div><div class="prog"><i style="width:${pct}%"></i></div></div><div class="clock ${ci.w?'warn':''}" id="clock">${ci.t}</div></div>`;
+  const V={warm:vWarm,card:vCard,prob:vProb,recog:vRecog,concept:vConcept,sprint:vSprint,book:vBook,bilan:vBilan};
+  return h+(V[st.k]||(()=>''))(st);
+}
+
+function vWarm(st){
+  if(!st.res)st.res={};
+  return `<div class="warm"><p class="muted">Réponds vite, de tête. Une virgule pour les décimaux.</p><div class="wq" id="wq">…</div><input id="ans" class="ansin" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done"><div style="margin-top:14px"><button class="btn primary" style="min-width:200px" data-a="warmOk">Valider</button></div><div class="wfb" id="wfb"></div>${st.start?'':`<button class="btn" style="margin-top:20px" data-a="warmGo">Démarrer</button>`}</div>`;
+}
+function warmSkills(st){const s=st.all?Object.keys(REF):studiedList().filter(c=>c.skill).map(c=>c.skill);return s.length?s:['mult']}
+function warmNext(st){const sk=pick(warmSkills(st));st.cur=Object.assign({skill:sk,t0:Date.now()},REF[sk]());const wq=$('#wq'),inp=$('#ans'),fb=$('#wfb');if(wq)wq.innerHTML=st.cur.q;if(inp){inp.value='';inp.setAttribute('inputmode',st.cur.mode);inp.setAttribute('autocapitalize',st.cur.mode==='text'?'characters':'off');inp.focus()}if(fb){fb.textContent='';fb.className='wfb'}}
+function warmSubmit(){const st=SES.steps[SES.i];if(!st.cur||st.busy)return;const inp=$('#ans');const v=inp?inp.value:'';if(!v.trim())return;const ok=norm(v)===norm(st.cur.ans);const ms=Date.now()-st.cur.t0;const r=st.res[st.cur.skill]||(st.res[st.cur.skill]={n:0,ok:0,ms:0});r.n++;if(ok)r.ok++;r.ms+=ms;
+  const fb=$('#wfb');if(fb){fb.className='wfb '+(ok?'ok':'ko');fb.textContent=ok?'Juste':'Réponse : '+st.cur.ans}st.busy=true;st.cur=null;
+  setTimeout(()=>{st.busy=false;if(Date.now()-st.start>=st.dur*1000)finishWarm();else warmNext(st)},ok?450:1500)}
+function finishWarm(){const st=SES.steps[SES.i];if(st.done)return;st.done=true;let n=0,ok=0;for(const [sk,r] of Object.entries(st.res)){n+=r.n;ok+=r.ok;const id='ref:'+sk;if(!S.cards[id])continue;const acc=r.ok/r.n,avg=r.ms/r.n/1000;const g=acc===1&&avg<6?4:acc>=.8?3:acc>=.5?2:1;schedule(id,g,{ms:r.ms/r.n})}save();SES.log.push({k:'warm',n,ok});nextStep()}
+
+function vCard(st){
+  const d=DEFS[st.id];if(!d){return `<p>Cette carte n’existe plus.</p><button class="btn" data-a="next">Continuer</button>`}
+  if(!st.t0)st.t0=Date.now();
+  const cs=S.cards[st.id];let lee=cs&&cs.leech&&d.cid?`<p class="note">Cette carte résiste. Avant de répondre, relis l’exemple résolu. <button class="link" data-a="ovl" data-cid="${d.cid}">Ouvrir la fiche</button></p>`:'';
+  let front,back;
+  if(d.type==='err'){const e=d.err;front=`<p class="small muted">Erreur du livre, ${SUBS[e.sub]}, ${e.test<=3?'mini-test':'test blanc'} n° ${e.test}, question ${e.q}</p><div class="front">${e.cid?CBYID[e.cid].title:'Question à refaire'}</div><p class="small" style="margin-top:12px">1. Sans regarder, énonce la méthode à voix basse.<br>2. Refais la question ${e.q} dans le livre${bookPage(e.sub,e.test)?` (le test commence p. ${bookPage(e.sub,e.test)})`:''}.</p>`;back=e.cid?`<div class="box" style="text-align:left">${CBYID[e.cid].regle}</div><p style="margin-top:10px"><button class="link" data-a="ovl" data-cid="${e.cid}">Revoir la fiche</button></p>`:'<p>Compare ta résolution avec le corrigé du livre.</p>'}
+  else{front=`<p class="small muted">${CBYID[d.cid].title}</p><div class="front">${d.f}</div>`;back=d.b}
+  let h=lee+`<div class="card flash">${front}${st.flip?`<div class="back">${back}</div>`:''}</div>`;
+  if(!st.flip)h+=`<button class="btn primary block" style="margin-top:16px" data-a="flip">Afficher la réponse</button>`;
+  else h+=`<p class="small muted" style="margin-top:14px;text-align:center">Honnêtement, tu t’en souvenais ?</p><div class="grades">${[[1,'À revoir'],[2,'Difficile'],[3,'Correct'],[4,'Facile']].map(([g,l])=>`<button class="btn ${g===1?'g1':''}" data-a="grade" data-g="${g}">${l}<small>${preview(st.id,g)}</small></button>`).join('')}</div>`;
+  return h;
+}
+function vProb(st){
+  if(!st.q){st.q=genQ(st.cid);st.phase='ask';st.sel=null;st.t0=Date.now();saveSes()}
+  const q=st.q,c=CBYID[st.cid];const cs=S.cards[st.id];
+  let left=`<p class="small muted">${SUBS[c.sub]}, ${c.title.toLowerCase()}</p>`;
+  if(cs&&cs.leech&&st.phase==='ask')left+=`<p class="note">Ce type de question te résiste. Relis l’exemple résolu avant. <button class="link" data-a="ovl" data-cid="${c.id}">Ouvrir la fiche</button></p>`;
+  left+=stemHTML(q)+optsHTML(q,st.sel,st.phase,'pick');
+  if(st.phase==='ask'){left+=st.sel==null?`<div class="ask"><button class="btn ghost block" data-a="skipQ">Je ne sais pas</button></div>`:`<div class="ask"><p>Ta confiance ?</p><div class="conf"><button class="btn" data-a="conf" data-c="sure">Sûre</button><button class="btn" data-a="conf" data-c="mid">J’hésite</button><button class="btn" data-a="conf" data-c="guess">Au hasard</button></div></div>`}
+  else left+=fbHTML(st,c.id);
+  return `<div class="split"><div>${left}</div><div>${scratchHTML('p'+SES.i)}</div></div>`;
+}
+function fbHTML(st,cid){
+  const ok=st.ok;let v=ok?'Juste':st.sel==null?'Passée':'Faux';
+  let h=`<div class="fb"><div class="verdict ${ok?'ok':'ko'}">${v}</div>`;
+  if(!ok&&st.conf==='sure')h+=`<p class="note">Tu étais sûre de toi : c’est justement le type d’erreur qu’on retient le mieux une fois corrigée. Prends le temps de lire l’explication.</p>`;
+  if(ok&&st.conf==='guess')h+=`<p class="note">Bonne réponse, mais au hasard : elle reviendra vite pour vérifier que la méthode est acquise.</p>`;
+  h+=`<p>${st.q.ex}</p>`;
+  if(st.iv)h+=`<p class="small muted">Ce type de question revient dans ${st.iv}.</p>`;
+  h+=`<div class="row" style="margin-top:12px"><button class="btn ghost" data-a="ovl" data-cid="${cid}">Revoir la fiche</button><button class="btn primary" data-a="next">Continuer</button></div></div>`;
+  return h;
+}
+function vRecog(st){
+  if(!st.q){st.q=recogQ(studiedList('calc').length>=3?studiedList('calc'):CONCEPTS.filter(c=>c.sub==='calc'));st.phase='ask';st.sel=null;st.t0=Date.now();saveSes()}
+  let h=`<p class="small muted">Sans résoudre : quelle méthode s’applique ?</p>`+stemHTML(st.q)+optsHTML(st.q,st.sel,st.phase,'pickRecog');
+  if(st.phase==='fb')h+=`<div class="fb"><div class="verdict ${st.ok?'ok':'ko'}">${st.ok?'Bien vu':'Pas celle-là'}</div><p>${st.q.ex}</p><button class="btn primary block" data-a="next">Continuer</button></div>`;
+  return h;
+}
+
+/* Concept : questions à froid, fiche, quiz */
+function vConcept(st){
+  const c=CBYID[st.cid];if(!st.phase){st.phase='pre';st.pi=0;st.pre=[genQ(c.id),genQ(c.id)];st.fs={ex:1};st.quiz=[genQ(c.id),genQ(c.id),genQ(c.id),genQ(c.id)];st.qi=0;st.score=0;saveSes()}
+  let h=`<h1>${c.title}</h1>`;
+  if(st.phase==='pre'){const q=st.pre[st.pi];h+=`<p class="muted">Avant la fiche, ${st.pi===0?'deux questions':'une dernière question'} pour t’échauffer. Pas de note : se tromper maintenant aide à retenir la suite.</p>`;
+    h+=`<div class="split"><div>${stemHTML(q)}${optsHTML(q,st.sel,st.sel!=null?'fb':'ask','prePick')}${st.sel!=null?`<div class="fb"><div class="verdict ${st.sel===q.a?'ok':'ko'}">${st.sel===q.a?'Bien joué':'Pas grave'}</div><p class="small">La fiche va t’expliquer la méthode.</p><button class="btn primary block" data-a="preNext">${st.pi===0?'Question suivante':'Ouvrir la fiche'}</button></div>`:''}</div><div>${scratchHTML('pre'+st.pi)}</div></div>`}
+  else if(st.phase==='fiche'){h+=ficheHTML(c,st.fs)+`<button class="btn primary block" style="margin-top:26px" data-a="toQuiz">Passer au quiz (4 questions)</button>`}
+  else if(st.phase==='quiz'){const q=st.quiz[st.qi];h+=`<p class="muted">Quiz, question ${st.qi+1} sur 4.</p><div class="split"><div>${stemHTML(q)}${optsHTML(q,st.sel,st.sel!=null?'fb':'ask','quizPick')}${st.sel!=null?`<div class="fb"><div class="verdict ${st.sel===q.a?'ok':'ko'}">${st.sel===q.a?'Juste':'Faux'}</div><p>${q.ex}</p><button class="btn primary block" data-a="quizNext">${st.qi<3?'Question suivante':'Terminer'}</button></div>`:''}</div><div>${scratchHTML('quiz'+st.qi)}</div></div>`}
+  else{h+=`<div class="card stack"><p class="verdict ${st.score>=3?'ok':''}">${st.score} bonne${st.score>1?'s':''} réponse${st.score>1?'s':''} sur 4</p><p>${st.score>=3?'Belle entrée en matière.':'C’est normal au premier passage : la répétition fera le travail.'} Ce concept entre dans tes révisions. Ses cartes reviendront dès la prochaine session, puis de plus en plus espacées.</p><button class="btn primary block" data-a="next">Continuer</button></div>`}
+  return h;
+}
+
+/* Sprint */
+function vSprint(st){
+  if(!st.qs){const pool=studiedList();st.qs=weightedConcepts(pool.length?pool:CONCEPTS.slice(0,1),st.n).map(c=>({cid:c.id,q:genQ(c.id)}));st.ans=Array(st.n).fill(null);st.ms=Array(st.n).fill(0);st.qi=0;st.phase='intro';st.dur=st.n*80000;saveSes()}
+  if(st.phase==='intro')return `<div class="card stack"><h1 style="margin-top:0">Sprint chrono</h1><p>${st.n} questions mêlées en ${Math.round(st.dur/60000)} minutes, soit le rythme du TAGE : 80 secondes par question.</p><p>Barème officiel : +4 si c’est juste, −1 si c’est faux, 0 si tu passes. Pas de correction avant la fin.</p><p class="note">Répondre au hasard entre 5 propositions rapporte 0 point en moyenne. Dès que tu peux en éliminer une, répondre devient rentable.</p><button class="btn primary block" data-a="sprintGo">Lancer le chrono</button></div>`;
+  if(st.phase==='run'){const it=st.qs[st.qi];const sel=st.cursel;return `<div class="split"><div><p class="small muted">Question ${st.qi+1} sur ${st.n}</p>${stemHTML(it.q)}${optsHTML(it.q,sel,'ask','sprintPick')}<div class="row" style="margin-top:16px"><button class="btn ghost" data-a="sprintSkip">Passer (0 point)</button><button class="btn primary" data-a="sprintOk" ${sel==null?'disabled':''}>Valider</button></div></div><div>${scratchHTML('sp'+st.qi)}</div></div>`}
+  const pts=st.qs.reduce((a,it,i)=>a+(st.ans[i]==null?0:st.ans[i]===it.q.a?4:-1),0);const nok=st.qs.filter((it,i)=>st.ans[i]===it.q.a).length;
+  let h=`<div class="card"><div class="bigscore"><span class="poster">${pts>0?'+':''}${pts}</span></div><h1 style="margin-top:0;text-align:center">point${Math.abs(pts)>1?'s':''}</h1><p class="muted">${nok} juste${nok>1?'s':''} sur ${st.n}${st.timeout?', temps écoulé':''}. Rapporté à un sous-test de 15 questions : environ ${Math.round(pts/st.n*15)} / 60.</p></div>`;
+  h+=st.qs.map((it,i)=>{const a=st.ans[i];const r=a==null?'passée':a===it.q.a?'juste':'fausse';return `<div class="review-item"><p><b>Question ${i+1}</b> <span class="${a===it.q.a?'ok-t':a==null?'muted':'ko-t'}">${r}</span></p>${stemHTML(it.q)}<p class="small" style="margin-top:8px">Bonne réponse : <b>${L5[it.q.a]}</b>, ${it.q.opts[it.q.a]}.${a!=null&&a!==it.q.a?` Ta réponse : ${L5[a]}.`:''}</p><details><summary>Explication</summary><p>${it.q.ex}</p></details></div>`}).join('');
+  return h+`<button class="btn primary block" style="margin-top:18px" data-a="next">Continuer</button>`;
+}
+function finishSprint(timeout){const st=SES.steps[SES.i];if(st.phase!=='run')return;st.phase='review';st.timeout=!!timeout;const now=Date.now();
+  const res=st.qs.map((it,i)=>{const a=st.ans[i];const r=a==null?(i>=st.qi&&timeout?'time':'skip'):a===it.q.a?'ok':'ko';if(r==='ko'&&S.cards[it.cid+':p'])S.cards[it.cid+':p'].due=Math.min(S.cards[it.cid+':p'].due,now);return {cid:it.cid,sub:CBYID[it.cid].sub,r,ms:st.ms[i]||undefined}}).filter(r=>r.r!=='time');
+  S.sprints.push({t:now,res});const pts=res.reduce((a,r)=>a+(r.r==='ok'?4:r.r==='ko'?-1:0),0);SES.log.push({k:'sprint',pts,n:st.n,ok:res.filter(r=>r.r==='ok').length});save();saveSes();render();window.scrollTo(0,0)}
+
+/* Test du livre */
+function vBook(st){
+  const pg=bookPage(st.sub,st.test);const title=`${SUBS[st.sub]}, ${st.test<=3?'mini-test':'test blanc'} n° ${st.test}`;
+  if(st.phase==='ready')return `<div class="card stack"><h1 style="margin-top:0">${title}</h1><p>Ouvre le livre${pg?` à la page ${pg}`:''}. 15 questions, 20 minutes, comme le jour J. Tu coches tes réponses ici ; les annonces de temps tombent à 10, 5 et 2 minutes de la fin.</p><button class="btn primary block" data-a="bookGo">Lancer les 20 minutes</button></div>`;
+  const sheet=(arr,act,extra)=>`<div class="sheet">${arr.map((v,i)=>`<div class="srow"><span class="n">${i+1}</span><div class="bubs">${[0,1,2,3,4].map(j=>`<button class="sb ${v===j?(act==='bookKey'?'key':'on'):''}" data-a="${act}" data-q="${i}" data-j="${j}" aria-label="Question ${i+1}, ${L5[j]}">${L5[j]}</button>`).join('')}</div>${extra?extra(i):''}</div>`).join('')}</div>`;
+  if(st.phase==='run')return `<p class="small muted">${title}. Touche une bulle pour la cocher, touche-la à nouveau pour l’effacer.</p>${sheet(st.ans,'bookAns')}<button class="btn block" style="margin-top:18px" data-a="bookEnd">J’ai terminé</button>`;
+  if(st.phase==='key')return `<h1>Le corrigé</h1><p class="muted">Pour chaque question, touche la bonne réponse indiquée dans le corrigé du livre. À droite, ce que tu avais coché.</p>${sheet(st.key,'bookKey',i=>`<span class="mine">${st.ans[i]==null?'–':L5[st.ans[i]]}</span>`)}<button class="btn primary block" style="margin-top:18px" data-a="bookCorrect" ${st.key.every(x=>x!=null)?'':'disabled'}>Calculer mon score</button>`;
+  if(st.phase==='errs'){const wrong=st.ans.map((a,i)=>i).filter(i=>st.ans[i]!==st.key[i]);const concepts=CONCEPTS.filter(c=>c.sub===st.sub);
+    let h=`<div class="card"><div class="bigscore"><span class="poster">${st.score}</span></div><h1 style="margin-top:0;text-align:center">sur 60</h1><p class="muted">${st.nok} justes, ${st.nko} fausses, ${st.nskip} passées.</p></div>`;
+    if(!wrong.length)return h+`<p style="margin-top:16px">Aucune erreur. Superbe.</p><button class="btn primary block" data-a="bookSave">Enregistrer</button>`;
+    h+=`<h2>Tes erreurs</h2><p class="muted">Pour chacune, indique la notion en jeu et la cause (le corrigé du livre t’aide). Elles reviendront dans tes révisions.</p>`;
+    h+=wrong.map(i=>{const e=st.errs[i]||(st.errs[i]={cid:'',cause:''});return `<div class="erow"><p><b>Question ${i+1}</b> <span class="small muted">${st.ans[i]==null?'passée':'tu as coché '+L5[st.ans[i]]}, réponse ${L5[st.key[i]]}</span></p><select data-ch="errC" data-q="${i}"><option value="">Notion en jeu…</option>${concepts.map(c=>`<option value="${c.id}" ${e.cid===c.id?'selected':''}>${c.title}</option>`).join('')}<option value="autre" ${e.cid==='autre'?'selected':''}>Autre notion</option></select><div class="chips" style="margin-top:10px">${['Méthode inconnue','Erreur de calcul','Piège','Manque de temps'].map(k=>`<button class="chip ${e.cause===k?'on':''}" data-a="errCause" data-q="${i}" data-v="${k}">${k}</button>`).join('')}</div></div>`}).join('');
+    return h+`<button class="btn primary block" style="margin-top:18px" data-a="bookSave">Enregistrer dans mes révisions</button>`}
+  return `<div class="card stack"><p>C’est enregistré. Tes erreurs reviendront dans tes sessions, à partir de demain.</p><button class="btn primary block" data-a="next">Terminer</button></div>`;
+}
+
+function vBilan(){
+  if(!SES.recorded){SES.recorded=true;recordSession()}
+  const L=SES.log;const qs=L.filter(x=>x.k==='prob'||x.k==='card'||x.k==='recog');const ok=qs.filter(x=>x.ok).length;
+  const warm=L.find(x=>x.k==='warm'),sp=L.find(x=>x.k==='sprint'),cps=L.filter(x=>x.k==='concept');
+  const mins=Math.round((Date.now()-SES.start)/60000);const tomorrow=Object.values(S.cards).filter(c=>c.due<Date.now()+DAY).length;
+  let h=`<div class="card hero"><div class="bigscore"><span class="poster">${qs.length?ok+'/'+qs.length:'Fini'}</span></div><h1 style="margin-top:0;text-align:center">Session terminée</h1><p class="muted" style="text-align:center">${mins} minute${mins>1?'s':''}.</p><ol class="plan">`;
+  if(warm)h+=`<li><span>Réflexes : ${warm.ok} sur ${warm.n}</span></li>`;
+  if(qs.length)h+=`<li><span>Révisions et exercices : ${ok} réussis sur ${qs.length}</span></li>`;
+  cps.forEach(cp=>{h+=`<li><span>Nouveau concept : ${CBYID[cp.cid].title} (${cp.score}/4 au quiz)</span></li>`});
+  if(sp)h+=`<li><span>Sprint : ${sp.pts>0?'+':''}${sp.pts} points, ${sp.ok} juste${sp.ok>1?'s':''} sur ${sp.n}</span></li>`;
+  h+=`</ol><p>Pour la suite, laisse passer au moins une heure : c’est cette pause qui fixe ce que tu viens de travailler. D’ici 24 heures, ${tomorrow} carte${tomorrow>1?'s':''} ${tomorrow>1?'seront':'sera'} à revoir.</p><button class="btn primary block" data-a="endSes">Terminer</button></div>`;
+  return h;
+}
+function recordSession(){const d=Math.round((Date.now()-SES.start)/1000);if(SES.log.length)S.sessions.push({t:SES.start,d,kind:SES.kind,sprint:!!SES.sprinted});if(S.sessions.length>500)S.sessions=S.sessions.slice(-400);save()}
+
+/* ============ Rendu ============ */
+function render(){
+  document.body.classList.toggle('ses',!!SES);
+  const key=SES?'s'+SES.i+'-'+(SES.steps[SES.i]||{}).k:'t'+TAB+(PAGE.cid||'');
+  $('#app').innerHTML=SES?viewSession():{today:viewToday,cours:viewCours,train:viewTrain,prog:viewProg}[TAB]();
+  $('#tabs').innerHTML=tabsHTML();
+  const o=$('#ovl');if(OVL){o.hidden=false;o.innerHTML=`<div class="inner"><div class="topbar"><button class="icon" data-a="closeOvl" aria-label="Fermer">✕</button><div class="tb-mid"><div class="tb-label">Fiche de cours</div></div></div><h1>${CBYID[OVL.cid].title}</h1>${ficheHTML(CBYID[OVL.cid],OVL.fs)}<button class="btn primary block" style="margin-top:24px" data-a="closeOvl">Revenir à la question</button></div>`}else{o.hidden=true;o.innerHTML=''}
+  if(key!==LASTKEY){window.scrollTo(0,0);if(!OVL)UI.scr=UI.scr&&false;LASTKEY=key}
+  initScratch();
+  if(SES){const st=SES.steps[SES.i];if(st&&st.k==='warm'&&st.start&&!st.done){if(st.cur){$('#wq').innerHTML=st.cur.q;const i=$('#ans');i.setAttribute('inputmode',st.cur.mode);i.focus()}else warmNext(st)}}
+}
+function nextStep(){SES.i++;UI.scr=false;if(SES.i>=SES.steps.length){SES=null;PENDING=null;applyPending()}saveSes();render()}
+function endSession(){if(SES&&!SES.recorded){SES.recorded=true;recordSession()}SES=null;PENDING=null;applyPending();saveSes();render()}
+function startSes(s){SES=s;PENDING=null;OVL=null;saveSes();render()}
+
+function syncHTML(){
+  if(SYNC.state==='noconfig')return `<div class="syncline off"><i></i>Cet appareil uniquement</div><p class="small">La synchronisation n’est pas encore configurée : la progression reste sur cet appareil.</p>`;
+  if(SYNC.state==='nokey')return `<div class="syncline off"><i></i>Pas encore d’espace personnel</div><p class="small">Crée ton espace : l’app génère ton lien personnel. Ouvre ensuite ce lien sur tes autres appareils pour y retrouver ta progression.</p><button class="btn primary block" data-a="createSpace">Créer mon espace</button>`;
+  let h=`<div class="syncline ${SYNC.state==='sync'?'':'off'}"><i></i>${SYNC.state==='sync'?'Synchronisé':SYNC.state==='connecting'?'Connexion en cours…':'Hors ligne pour l’instant, nouvel essai automatique'}</div>`;
+  h+=`<p class="small">Ton lien personnel : ouvre-le sur ton iPhone, ton iPad et ton Mac, puis ajoute-le à l’écran d’accueil. Garde-le pour toi, c’est lui qui donne accès à ta progression.</p><button class="btn block" data-a="copyLink">Copier mon lien personnel</button>`;
+  return h;
+}
+/* ============ Actions ============ */
+function toast(msg){const d=document.createElement('div');d.className='alertbar';d.setAttribute('role','status');d.textContent=msg;document.body.appendChild(d);setTimeout(()=>d.remove(),2800)}
+const cur=()=>SES&&SES.steps[SES.i];
+function insertLater(step){const lim=SES.steps.findIndex((s,i)=>i>SES.i&&(s.k==='sprint'||s.k==='bilan'));const end=lim<0?SES.steps.length:lim;SES.steps.splice(Math.min(SES.i+4,end),0,step)}
+function evaluate(st,ok){
+  const now=Date.now(),ms=now-st.t0;st.ok=ok;st.phase='fb';
+  const g=!ok?1:st.conf==='guess'?2:st.conf==='mid'?3:(ms<45000?4:3);
+  if(st.extra){if(!ok&&S.cards[st.id])S.cards[st.id].due=Math.min(S.cards[st.id].due,now+20*MIN);S.reviews.push({t:now,id:st.id,g,type:'p',sub:CBYID[st.cid].sub,rev:false,ms,ok,conf:st.conf})}
+  else{const n=schedule(st.id,g,{ms,ok,conf:st.conf});st.iv=fmtIv(n.due-now)}
+  if(!ok&&!st.requeued)insertLater({k:'prob',id:st.id,cid:st.cid,extra:true,requeued:true});
+  SES.log.push({k:'prob',ok});save();saveSes();render();
+}
+const ACT={
+  tab:d=>{TAB=d.t;PAGE={cid:null,fs:{ex:1}};render()},
+  openC:d=>{PAGE={cid:d.cid,fs:{ex:1}};render()},
+  closeC:()=>{PAGE={cid:null,fs:{ex:1}};render()},
+  learnC:d=>startSes(mkSes('learn',[{k:'concept',cid:d.cid}])),
+  practiceC:d=>startSes(mkSes('practice',Array.from({length:6},()=>({k:'prob',id:d.cid+':p',cid:d.cid,extra:true})))),
+  practiceSub:d=>startSes(mkSes('practice',weightedConcepts(studiedList(d.s),8).map(c=>({k:'prob',id:c.id+':p',cid:c.id,extra:true})))),
+  startSprint:()=>startSes(mkSes('sprint',[{k:'sprint',n:UI.sprintN}])),
+  startWarm:()=>startSes(mkSes('warm',[{k:'warm',dur:120,all:true}])),
+  sprintN:d=>{UI.sprintN=+d.n;render()},
+  bookSub:d=>{UI.booksub=d.s;render()},
+  startBook:()=>startSes({kind:'book',steps:[{k:'book',sub:UI.booksub,test:+UI.booktest,phase:'ready',ans:Array(15).fill(null),key:Array(15).fill(null),errs:{},al:{}}],i:0,start:Date.now(),log:[]}),
+  startDaily:()=>startSes(buildDaily(S.settings.len)),
+  startShort:()=>startSes(buildDaily(10)),
+  len:d=>{S.settings.len=+d.n;save();render()},
+  introOk:()=>{S.intro=true;save();render()},
+  resume:()=>{SES=PENDING;PENDING=null;render()},
+  dropPending:()=>{if(PENDING&&PENDING.log&&PENDING.log.length){SES=PENDING;recordSession();SES=null}PENDING=null;try{localStorage.removeItem(SKEY)}catch(e){}render()},
+  exNext:()=>{CURFS.ex=(CURFS.ex||1)+1;saveSes();render()},
+  trou:(d)=>{const i=+d.i;CURFS.trouSel=i;const c=OVL?CBYID[OVL.cid]:SES&&cur().k==='concept'?CBYID[cur().cid]:CBYID[PAGE.cid];if(i===c.trou.ok)CURFS.trouOk=true;saveSes();render()},
+  ovl:d=>{OVL={cid:d.cid,fs:{ex:1}};render();$('#ovl').scrollTop=0},
+  closeOvl:()=>{OVL=null;render()},
+  quit:()=>{const st=cur();const msg=st&&st.k==='book'&&st.phase!=='ready'&&st.phase!=='done'?'Quitter ? Ce test du livre ne sera pas enregistré.':'Quitter la session ? Tes réponses sont déjà enregistrées.';if(!confirm(msg))return;if(SES.kind!=='book'&&SES.log.length&&!SES.recorded){SES.recorded=true;recordSession()}SES=null;PENDING=null;OVL=null;applyPending();saveSes();render()},
+  next:()=>nextStep(),
+  endSes:()=>endSession(),
+  scrToggle:()=>{UI.scr=!UI.scr;render()},
+  scrClear:()=>{SCR.strokes=[];render()},
+  /* réflexes */
+  warmGo:()=>{const st=cur();st.start=Date.now();saveSes();render()},
+  warmOk:()=>warmSubmit(),
+  /* cartes */
+  flip:()=>{cur().flip=true;render()},
+  grade:d=>{const st=cur(),g=+d.g;schedule(st.id,g,{ms:Date.now()-(st.t0||Date.now())});if(g===1&&!st.requeued)insertLater({k:'card',id:st.id,requeued:true});SES.log.push({k:'card',ok:g>1});save();nextStep()},
+  /* problèmes */
+  pick:d=>{const st=cur();if(st.phase!=='ask')return;st.sel=+d.i;render()},
+  conf:d=>{const st=cur();st.conf=d.c;evaluate(st,st.sel===st.q.a)},
+  skipQ:()=>{const st=cur();st.sel=null;st.conf='skip';evaluate(st,false)},
+  pickRecog:d=>{const st=cur();if(st.phase!=='ask')return;st.sel=+d.i;const ok=st.sel===st.q.a;const ms=Date.now()-st.t0;st.ok=ok;st.phase='fb';schedule(st.id,ok?(ms<12000?4:3):1,{ms,ok});SES.log.push({k:'recog',ok});save();saveSes();render()},
+  /* concept */
+  prePick:d=>{const st=cur();if(st.sel!=null)return;st.sel=+d.i;saveSes();render()},
+  preNext:()=>{const st=cur();st.sel=null;if(st.pi===0)st.pi=1;else st.phase='fiche';saveSes();render();window.scrollTo(0,0)},
+  toQuiz:()=>{const st=cur();st.phase='quiz';st.sel=null;saveSes();render();window.scrollTo(0,0)},
+  quizPick:d=>{const st=cur();if(st.sel!=null)return;st.sel=+d.i;if(st.sel===st.quiz[st.qi].a)st.score++;saveSes();render()},
+  quizNext:()=>{const st=cur();st.sel=null;st.qi++;if(st.qi>=4){st.phase='done';introduceConcept(st.cid,st.score);SES.log.push({k:'concept',cid:st.cid,score:st.score})}saveSes();render();window.scrollTo(0,0)},
+  /* sprint */
+  sprintGo:()=>{const st=cur();st.phase='run';st.start=Date.now();st.qStart=Date.now();st.cursel=null;saveSes();render()},
+  sprintPick:d=>{cur().cursel=+d.i;render()},
+  sprintOk:()=>sprintAdvance(cur().cursel),
+  sprintSkip:()=>sprintAdvance(null),
+  /* test du livre */
+  bookGo:()=>{const st=cur();st.phase='run';st.start=Date.now();st.dur=20*60000;saveSes();render()},
+  bookAns:d=>{const st=cur();const q=+d.q,j=+d.j;st.ans[q]=st.ans[q]===j?null:j;saveSes();render()},
+  bookEnd:()=>{const st=cur();if(Date.now()-st.start<st.dur&&!confirm('Il reste du temps. Passer au corrigé ?'))return;st.phase='key';saveSes();render()},
+  bookKey:d=>{const st=cur();st.key[+d.q]=+d.j;saveSes();render()},
+  bookCorrect:()=>{const st=cur();st.nok=st.ans.filter((a,i)=>a===st.key[i]).length;st.nskip=st.ans.filter(a=>a==null).length;st.nko=15-st.nok-st.nskip;st.score=4*st.nok-st.nko;st.phase='errs';saveSes();render();window.scrollTo(0,0)},
+  errCause:d=>{const st=cur();const e=st.errs[d.q]||(st.errs[d.q]={cid:'',cause:''});e.cause=d.v;saveSes();render()},
+  bookSave:()=>{const st=cur();const now=Date.now();
+    st.ans.forEach((a,i)=>{if(a===st.key[i])return;const e=st.errs[i]||{};const cid=CBYID[e.cid]?e.cid:null;const id=`err:${now}-${i}`;S.errs.push({id,test:st.test,sub:st.sub,q:i+1,cid,cause:e.cause||'Non précisée',t:now});S.cards[id]={reps:0,due:now+18*3600e3};if(cid&&S.cards[cid+':p'])S.cards[cid+':p'].due=Math.min(S.cards[cid+':p'].due,now)});
+    S.book.push({t:now,sub:st.sub,test:st.test,score:st.score,ok:st.nok,ko:st.nko,skip:st.nskip});buildDefs();save();st.phase='done';saveSes();render()},
+  /* réglages */
+  setNew:d=>{S.settings.newPerDay=+d.n;save();render()},
+  setTheme:d=>{S.settings.theme=d.t;save();applyTheme();render()},
+  exportS:()=>{const txt=JSON.stringify(S);const ta=$('#bk');if(ta)ta.value=txt;try{navigator.clipboard.writeText(txt).then(()=>toast('Code de sauvegarde copié')).catch(()=>toast('Copie le texte affiché ci-dessous'))}catch(e){toast('Copie le texte affiché ci-dessous')}},
+  importS:()=>{const ta=$('#bk');try{const o=JSON.parse(ta.value);if(!o||!o.cards||!o.studied)throw 0;const b=blank();S=Object.assign(b,o,{settings:Object.assign(b.settings,o.settings||{})});buildDefs();save();applyTheme();toast('Progression restaurée');render()}catch(e){toast('Ce code n’est pas valide. Colle le code complet.')}},
+  createSpace:()=>createSpace(),
+  copyLink:()=>{const l=personalLink();try{navigator.clipboard.writeText(l).then(()=>toast('Lien copié')).catch(()=>prompt('Ton lien personnel :',l))}catch(e){prompt('Ton lien personnel :',l)}},
+  resetAll:()=>{if(!confirm('Effacer toute la progression ? C’est définitif.'))return;S=blank();buildDefs();save();try{localStorage.removeItem(SKEY)}catch(e){}PENDING=null;render()}
+};
+function sprintAdvance(v){const st=cur();if(st.phase!=='run')return;st.ans[st.qi]=v;st.ms[st.qi]=Date.now()-st.qStart;st.cursel=null;st.qi++;st.qStart=Date.now();UI.scr=false;if(st.qi>=st.n)finishSprint(false);else{saveSes();render();window.scrollTo(0,0)}}
+
+document.addEventListener('click',e=>{const el=e.target.closest('[data-a]');if(!el||el.disabled)return;const f=ACT[el.dataset.a];if(f){e.preventDefault();f(el.dataset,el)}});
+document.addEventListener('change',e=>{const el=e.target.closest('[data-ch]');if(!el)return;if(el.dataset.ch==='bookTest')UI.booktest=el.value;else if(el.dataset.ch==='errC'){const st=cur();const e2=st.errs[el.dataset.q]||(st.errs[el.dataset.q]={cid:'',cause:''});e2.cid=el.value;saveSes()}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target&&e.target.id==='ans'){e.preventDefault();warmSubmit()}});
+setInterval(()=>{if(!SES)return;const st=cur();if(!st)return;const c=$('#clock');if(c){const ci=clockInfo();c.textContent=ci.t;c.classList.toggle('warn',ci.w)}
+  if(st.k==='sprint'&&st.phase==='run'&&Date.now()-st.start>=st.dur)finishSprint(true);
+  if(st.k==='book'&&st.phase==='run'){const rem=(st.dur-(Date.now()-st.start))/1000;for(const th of [600,300,120]){if(rem<=th&&rem>th-30&&!st.al[th]){st.al[th]=1;toast(`Il reste ${th/60} minutes`);saveSes()}}if(rem<=0){st.phase='key';toast('Temps écoulé');saveSes();render()}}
+  if(st.k==='warm'&&st.start&&!st.done&&!st.busy&&Date.now()-st.start>=st.dur*1000)finishWarm();
+},500);
+let rsz;window.addEventListener('resize',()=>{clearTimeout(rsz);rsz=setTimeout(()=>{if($('#scr'))initScratch()},200)});
+applyTheme();render();initSync();
+</script>
+</body>
+</html>
